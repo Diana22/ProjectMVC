@@ -1,0 +1,58 @@
+create DATABASE if not exists magazin;
+
+create table if not EXISTS stoc
+(
+id_prajitura int,
+cantitate int
+);
+
+create table if not exists prajitura
+(
+id_prajitura int auto_increment primary KEY,
+nume_prajitura varchar(30),
+pret int,
+gramaj INT,
+calorii INT
+);
+
+create table if not exists comenzi_prajituri
+(
+id_comanda int,
+id_prajitura int,
+cantitate int,
+primary key (id_comanda, id_prajitura)
+);
+
+create table if not exists comenzi
+(
+id_comanda int primary key AUTO_INCREMENT,
+id_client int,
+nume_prajitura varchar(30),
+cantitate int,
+data_livrare datetime
+);
+
+create table if not exists clienti
+(
+id_client int auto_increment primary key,
+nume_client varchar(30),
+adresa varchar(35),
+nr_telefon varchar(10)
+);
+
+create table if not exists ingrediente_prajituri
+(
+id_prajitura int,
+id_ingredient int
+);
+
+create table if not exists ingrediente
+(
+id_ingredient int auto_increment primary key,
+nume_ingredient varchar(25)
+);
+
+alter table stoc add FOREIGN KEY (id_prajitura) references prajitura(id_prajitura);
+alter table ingrediente_prajituri add FOREIGN KEY (id_prajitura) references prajitura(id_prajitura);
+alter table ingrediente_prajituri add FOREIGN KEY (id_ingredient) references ingrediente(id_ingredient);
+alter table comenzi add FOREIGN KEY (id_client) references clienti(id_client);
