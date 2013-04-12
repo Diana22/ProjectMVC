@@ -1,0 +1,62 @@
+create DATABASE if not exists store;
+
+create table if not EXISTS store.stoc
+(
+id_cake int primary key,
+quantity int
+);
+
+create table if not exists store.cake
+(
+id_cake int auto_increment primary KEY,
+name_cake varchar(30),
+price int,
+weight INT,
+calories INT
+);
+
+create table if not exists store.order_cake
+(
+id_order int,
+id_cake int,
+quantity int,
+primary key (id_order, id_cake)
+);
+
+create table if not exists store.orders
+(
+id_order int primary key AUTO_INCREMENT,
+id_client int,
+name_cake varchar(30),
+quantity int,
+due_date datetime
+);
+
+create table if not exists store.client
+(
+id_client int auto_increment primary key,
+name_client varchar(30),
+adress varchar(35),
+phone varchar(10)
+);
+
+create table if not exists store.ingredient_cake
+(
+id_cake int,
+id_ingredient int,
+primary key (id_cake, id_ingredient)
+);
+
+create table if not exists store.ingredient
+(
+id_ingredient int auto_increment primary key,
+name_ingredient varchar(25)
+);
+
+create table if not exists store.account
+(
+username varchar(50),
+pass varchar(50),
+type int,
+id_client int primary key
+);
