@@ -1,6 +1,7 @@
 <?php
 include_once __DIR__ . "/database.php";
 include_once __DIR__ . "/cake.php";
+include_once __DIR__ . "/model_client.php";
 class model_order {
 
     var $id;
@@ -152,6 +153,13 @@ class model_order {
             }
             return $cakes;
         }
+    }
+
+    /*
+     * Returns a client object that is linked to current order.
+     */
+    public function get_client(){
+        return model_client::load_by_account_id($this->id_client);
     }
 
     /*
