@@ -2,61 +2,60 @@ create DATABASE if not exists store;
 
 create table if not EXISTS store.stoc
 (
-id_cake int primary key,
-quantity int
+stoc_id int primary key,
+stoc_quantity int
 );
 
-create table if not exists store.cake
+create table if not exists store.cakes
 (
-id_cake int auto_increment primary KEY,
-name_cake varchar(30),
-price int,
-weight INT,
-calories INT
+cake_id int auto_increment primary KEY,
+cake_name varchar(30),
+cake_price int,
+cake_weight INT,
+cake_calories INT
 );
 
-create table if not exists store.order_cake
+create table if not exists store.orders_cakes
 (
-id_order int,
-id_cake int,
-quantity int,
-primary key (id_order, id_cake)
+oc_id_order int,
+oc_id_cake int,
+oc_quantity int,
+primary key (oc_id_order, oc_id_cake)
 );
 
 create table if not exists store.orders
 (
-id_order int primary key AUTO_INCREMENT,
-id_client int,
-name_cake varchar(30),
-quantity int,
-due_date datetime
+order_id int primary key AUTO_INCREMENT,
+order_id_client int,
+order_pickup_date datetime
 );
 
-create table if not exists store.client
+create table if not exists store.ingredients_cakes
 (
-id_client int auto_increment primary key,
-name_client varchar(30),
-adress varchar(35),
-phone varchar(10)
+ic_id_cake int,
+ic_id_ingredient int,
+primary key (ic_id_cake, ic_id_ingredient)
 );
 
-create table if not exists store.ingredient_cake
+create table if not exists store.ingredients
 (
-id_cake int,
-id_ingredient int,
-primary key (id_cake, id_ingredient)
+ingredient_id int auto_increment primary key,
+ingredient_name varchar(25)
 );
 
-create table if not exists store.ingredient
+create table if not exists store.accounts
 (
-id_ingredient int auto_increment primary key,
-name_ingredient varchar(25)
+account_id int primary key auto_increment,
+account_username varchar(50),
+account_pass varchar(50),
+account_type int
 );
 
-create table if not exists store.account
+create table if not exists store.clients
 (
-username varchar(50),
-pass varchar(50),
-type int,
-id_client int primary key
+client_id_account int NOT NULL,
+client_name varchar(30),
+client_address varchar(35),
+client_phone varchar(10),
+foreign key (client_id_account) references store.accounts(account_id)
 );
