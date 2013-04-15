@@ -14,47 +14,26 @@ class model_ingredient
     var $name;
 
     /**
-     * This function returns an ingredient from database "store" by Id given.
+     * This function returns an ingredients from database "store" by Id given.
      * @param $id
      * @return array
      */
-    public static  function load_by_id($id)
+    public static function load_by_id($id)
     {
 
         $db = model_database::instance();
-        $sql = 'SELECT id_ingredient, name_ingredient
-			FROM ingredient
-			WHERE id_ingredient =  ' . $id;
+        $sql = 'SELECT ingredient_id, ingredient_name
+			FROM ingredients
+			WHERE ingredient_id =  ' . $id;
         if ($result = $db->get_row($sql)) {
             $response = new model_ingredient;
-            $response->id = $result['id_ingredient'];
-            $response->name = $result['name_ingredient'];
+            $response->id = $result['ingredient_id'];
+            $response->name = $result['ingredient_name'];
             return $response;
         }
         return false;
     }
 
-
-    /**
-     * This function returns all ingredients from database "store".
-     * @return array
-     */
-    public function  make($array){
-        $this->id = $array['id_ingredient'];
-        $this->name = $array['name_ingredient'];
-        return $this;
-    }
-
-    /**
-     * This function compares two strings and sorts them.
-     * @param $a
-     * @param $b
-     * @return int
-     */
-    public function cmp($a, $b)
-    {
-        return strcmp($a["id_ingredient"], $b["name_ingredient"]);
-    }
 
     /**
      * This function returns all objects from database as an sorted array.
@@ -63,79 +42,83 @@ class model_ingredient
     public static function get_all()
     {
         $db = model_database::instance();
-        $sql = "SELECT *
-               FROM ingredient";
-        if ($result = $db->get_rows($sql)){
-            $ingredient = new model_ingredient;
-
-            foreach ($result as $array){
-                $return[$array['name_ingredient']] = $array['id_ingredient'];
+        $sql = "SELECT * FROM ingredients
+                ORDER BY ingredient_name";
+        $return = array();
+        if ($result = $db->get_rows($sql)) {
+            foreach ($result as $array) {
+                $ingredients = new model_ingredient;
+                $ingredients->name = $array['ingredient_name'];
+                $ingredients->id = $array['ingredient_id'];
+                $return[] = $ingredients;
             }
-            return $return;
-        };
-        usort($return,"cmp");
-        var_dump($return);
-        return $result;
+            ksort($return);
+        }
+        ;
+
+        return $return;
     }
 
     /**
-     * This function adds an ingredient with given name to the database.
+     * This function adds an ingredients with given name to the database.
      * @param $name
      */
     public static function create($name)
     {
         $db = model_database::instance();
-        $sql = 'insert into ingredient
-                (name_ingredient)
+        $sql = 'insert into ingredients
+                (ingredient_name)
                 values
-                (\'' . $name . '\');';
-       if ($db->execute($sql)){
-           return true;
-       };
+                (\'' . mysql_real_escape_string($name) . '\');';
+        if ($db->execute($sql)) {
+            $new_id = $db->last_insert_id();
+            return model_ingredient::load_by_id($new_id);
+        }
+        ;
         return false;
     }
 
     /**
-     * This function edits an ingredient with given name.
+     * This function edits an ingredients with given name.
      * @param $id
      * @param $name
      */
     public function edit($name)
     {
-
         $db = model_database::instance();
-        $sql = ' UPDATE ingredient
-        SET name_ingredient=\'' . $name . '\'
-        WHERE id_ingredient=' .$this-> id . ' ;';
-        if ($db->execute($sql)){
-            $this->name=$name;
+        $sql = ' UPDATE ingredients
+        SET ingredient_name=\'' . mysql_real_escape_string($name) . '\'
+        WHERE ingredient_id=' . $this->id . ' ;';
+        if ($db->execute($sql)) {
+            $this->name = mysql_real_escape_string($name);
             return TRUE;
-        };
+        }
+        ;
         return FALSE;
     }
 
-
     /**
-     * This function is deleting an ingredient by given name.
+     * This function is deleting an ingredients by given name.
      * @param $name
      */
     public function delete($name)
     {
         $db = model_database::instance();
-        $sql = ' DELETE FROM ingredient WHERE name_ingredient=\'' . $name . '\'';
-        if ($db->execute($sql)){
-            $this->name=null;
-            $this->id=null;
+        $sql = ' DELETE FROM ingredients WHERE ingredient_name=\'' . mysql_real_escape_string($name) . '\'';
+        if ($db->execute($sql)) {
+            $this->name = null;
+            $this->id = null;
 
-        };
+        }
+        ;
     }
 
 
 }
 
-//$ingredient =new model_ingredient;
-//$ingredient->delete('cocos');
+//$ingredients =new model_ingredients;
+//$ingredients->delete('cocos');
 
-$order = model_ingredient::get_all();
-var_dump($order);
+$order = model_ingredient::create("cirese");
+//var_dump($order);
 //var_dump($result);
