@@ -73,26 +73,6 @@ class model_order {
         }
     }
 
-//    /*
-//    * Gets all orders that have a due_date.
-//    * @param $date date to search for.
-//    * @return array of objects  that have that pickup date.
-//    */
-//    public static function get_by_pickup_date($date){
-//        $db = model_database::instance();
-//        $sql = 'SELECT order_id, order_id_client, order_pickup_date
-//			    FROM orders
-//			    WHERE pickup_date = \'' . $date . '\';';
-//        if ($result = $db->get_rows($sql)) {
-//            $model = new model_order();
-//            foreach ($result as $array)
-//            {
-//                $return[] = $model->set($array);
-//            }
-//            return $return;
-//        }
-//    }
-
      /*
      * Adds an order.
      * @param $id client id.
@@ -109,8 +89,7 @@ class model_order {
         {
             $sql = 'SELECT order_id, order_id_client, order_pickup_date
 			    FROM orders
-			    WHERE order_pickup_date = \'' . $date . '\'
-			    && order_id_client = ' . $client_id . ';';
+			    WHERE order_id = \'' . $db->last_insert_id()  . '\';';
 
             if ($result = $db->get_row($sql)) {
                 $return = new model_order();
@@ -125,40 +104,70 @@ class model_order {
      * Deletes an order the entry corresponding to the current object.
      */
     public function delete(){
-        $success = 1;
-        // work in progress.
+        $success = true;
         $db = model_database::instance();
         $sql = 'DELETE FROM orders
-                WHERE id_order=\'' . $this->id . '\';';
-        $db->execute($sql);
-        if($db->get_affected_rows() < 1){
-            $success = 0;
+                WHERE order_id=\'' . $this->id . '\';';
+        if($db->execute($sql)){
+            $success = false;
         }
+
         $sql = 'DELETE FROM orders_cakes
-                WHERE id_order=\'' . $this->id . '\';';
+                WHERE oc_id_order=\'' . $this->id . '\';';
+        if($db->execute($sql)){
+            $success = false;
+        }
+        $this->id = null;
+        $this->id_client = null;
+        $this->pickup_date = null;
+        return $success;
     }
 
-//    /*
-//     * Gets the order that has a specified parameter.
-//     * @param $key criteria by which to select
-//     * @param $val value to select.
-//     * @return a specific order.
-//     */
-//    public static function get_by_param($key, $val){
-//        $db = model_database::instance();
-//        $sql = 'SELECT order_id, order_id_client, order_pickup_date
-//			    FROM orders
-//			    WHERE ' . $key . ' = \'' . $val . '\';';
-//        if ($result = $db->get_rows($sql)) {
-//            $model = new model_order();
-//            foreach ($result as $array)
-//            {
-//                $return[] = $model->set($array);
-//            }
-//            return $return;
-//        }
-//    }
+    /*
+     * Updates the current record with new values.
+     */
+    public function update($client_id, $pickup_date) {
+        $db = model_database::instance();
+        $sql = 'UPDATE orders
+                SET order_id_client=' . $client_id . ', order_pickup_date=\'' . $pickup_date . '\'
+                WHERE order_id=' . $this->id;
+        if($db->execute($sql)){
+            $this->id_client = $client_id;
+            $this->pickup_date = $pickup_date;
+            return true;
+        }
+        return false;
+    }
 
+    /*
+     * Adds new items to the current order.
+     */
+    public function add_cake($cake_id, $quantity){
+        $db = model_database::instance();
+        $sql = 'INSERT INTO orders_cakes
+                VALUES ('. $this->id . ',' . $cake_id . ',' . $quantity . ')';
+        if ($db->execute($sql)){
+            return true;
+        }
+        return false;
+    }
+
+    /*
+     * Deletes specified cake from current order.
+     */
+    public function remove_cake($cake_id){
+        $db = model_database::instance();
+        $sql = 'DELETE FROM orders_cakes
+         where oc_id_order=' . $this->id . ' && oc_id_cake=' . $cake_id . ';';
+        if ($db->execute($sql)){
+            return true;
+        }
+        return false;
+    }
+
+    /*
+     * Sets the object attributes to those of an array with same keys.
+     */
     public function set($array){
         $this->id = $array['order_id'];
         $this->id_client = $array['order_id_client'];
@@ -167,5 +176,6 @@ class model_order {
     }
 
 }
-
-var_dump(model_order::get_by_cake_name('asd'));
+//$model = model_order::get_by_order_id(10);
+//$model->remove_cake(3);
+//var_dump($model);
