@@ -109,7 +109,7 @@ class model_order {
         {
             $sql = 'SELECT order_id, order_id_client, order_pickup_date
 			    FROM orders
-			    WHERE pickup_date = \'' . $date . '\'
+			    WHERE order_pickup_date = \'' . $date . '\'
 			    && order_id_client = ' . $client_id . ';';
 
             if ($result = $db->get_row($sql)) {
@@ -125,12 +125,17 @@ class model_order {
      * Deletes an order the entry corresponding to the current object.
      */
     public function delete(){
+        $success = 1;
         // work in progress.
         $db = model_database::instance();
         $sql = 'DELETE FROM orders
                 WHERE id_order=\'' . $this->id . '\';';
         $db->execute($sql);
-        return $db->get_affected_rows();
+        if($db->get_affected_rows() < 1){
+            $success = 0;
+        }
+        $sql = 'DELETE FROM orders_cakes
+                WHERE id_order=\'' . $this->id . '\';';
     }
 
 //    /*
