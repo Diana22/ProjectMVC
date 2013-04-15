@@ -2,131 +2,166 @@
 include_once __DIR__ .'/database.php';
 include_once __DIR__ .'/model_ingredient.php';
 class model_cake {
-    var $id_cake;
-    var $name_cake;
-    var $price;
-    var $weight;
-    var $calories;
+    var $id;
+    var $cake_name;
+    var $cake_price;
+    var $cake_weight;
+    var $cake_calories;
+    var $cake_quantity;
 
-    public static function create($name_cake, $price, $weight, $calories)
+    /**
+     * Add a new cake in database
+     * @param $cake_name
+     * @param $cake_price
+     * @param $cake_weight
+     * @param $cake_calories
+     * @param $cake_quantity
+     * @return bool|model_cake
+     */
+    public static function create($cake_name, $cake_price, $cake_weight, $cake_calories, $cake_quantity)
     {
         $db = model_database::instance();
-        $sql = 'INSERT INTO cake (name_cake, price, weight, calories) values (\'' . $name_cake . '\', ' . $price . ', ' . $weight . ', ' . $calories . ');';
-        if ($result = $db->execute($sql)) {
-            $cake = new model_cake();
-            $cake->id_cake = $result['id_cake'];
-            $cake->name_cake = $result['name_cake'];
-            $cake->price = $result['price'];
-            $cake->weight = $result['weight'];
-            $cake->calories = $result['calories'];
-            return $cake;
+        $sql = 'INSERT INTO cakes (cake_name, cake_price, cake_weight, cake_calories, cake_quantity) values (\'' .  mysql_real_escape_string($cake_name) . '\', ' .  $cake_price . ', ' .  $cake_weight . ', ' .  $cake_calories .',' .$cake_quantity . ');';
+        $db->execute($sql);
+        if ($db->get_affected_rows() > 0)
+        {
+            $sql = 'SELECT cake_id, cake_name, cake_price, cake_weight, cake_calories, cake_quantity
+                FROM cakes
+                WHERE cake_id = \'' .  $db->last_insert_id() . '\';';
+            if ($result = $db->get_row($sql)) {
+                $res = new model_cake();
+                $res->id = $result['cake_id'];
+                $res->cake_name = $result['cake_name'];
+                $res->cake_price = $result['cake_price'];
+                $res->cake_weight = $result['cake_weight'];
+                $res->cake_calories = $result['cake_calories'];
+                $res->cake_quantity = $result['cake_quantity'];
+                return $res;
+            }
         }
         return FALSE;
 
     }
 
+    /**
+     * Load a cake by id from database
+     * @param $id
+     * @return bool|model_cake
+     */
     public static function load_by_id($id)
     {
         $db = model_database::instance();
         $sql = 'SELECT *
-            FROM cake
-            WHERE id_cake = ' .$id;
+            FROM cakes
+            WHERE cake_id = ' .$id;
         if ($result = $db->get_row($sql)) {
             $cake = new model_cake();
-            $cake->id_cake = $result['id_cake'];
-            $cake->name_cake = $result['name_cake'];
-            $cake->price = $result['price'];
-            $cake->weight = $result['weight'];
-            $cake->calories = $result['calories'];
+            $cake->id = $result['cake_id'];
+            $cake->cake_name = $result['cake_name'];
+            $cake->cake_price = $result['cake_price'];
+            $cake->cake_weight = $result['cake_weight'];
+            $cake->cake_calories = $result['cake_calories'];
+            $cake->cake_quantity = $result['cake_quantity'];
             return $cake;
         }
         return FALSE;
     }
 
-
+    /**
+     * Load all cakes from database
+     * @return array
+     */
     public static function get_all()
     {
         $res = array();
         $db = model_database::instance();
         $sql = 'SELECT *
-            FROM cake';
+            FROM cakes';
         if ($result = $db->get_rows($sql)) {
-            $cake = new model_cake();
             foreach($result as $a){
-                $cake->id_cake = $a['id_cake'];
-                $cake->name_cake = $a['name_cake'];
-                $cake->price = $a['price'];
-                $cake->weight = $a['weight'];
-                $cake->calories = $a['calories'];
-                array_push($res, $a);
+                $cake = new model_cake();
+                $cake->id = $a['cake_id'];
+                $cake->cake_name = $a['cake_name'];
+                $cake->cake_price = $a['cake_price'];
+                $cake->cake_weight = $a['cake_weight'];
+                $cake->cake_calories = $a['cake_calories'];
+                $cake->cake_quantity = $a['cake_quantity'];
+                array_push($res, $cake);
             }
-            return $res;
         }
+        return $res;
     }
 
-
+    /**
+     * Delete a cake from database
+     * @return bool
+     */
     public function delete()
     {
         $db = model_database::instance();
-        $sql = 'DELETE FROM cake
-            WHERE id_cake = '. $this->id_cake;
-        $this->id_cake = NULL;
-        $this->name_cake = NULL;
-        $this->price = NULL;
-        $this->weight = NULL;
-        $this->calories = NULL;
+        $sql = 'DELETE FROM cakes
+            WHERE cake_id = '. $this->id;
         if ($db->execute($sql)) {
+            $this->id = NULL;
+            $this->cake_name = NULL;
+            $this->cake_price = NULL;
+            $this->cake_weight = NULL;
+            $this->cake_calories = NULL;
+            $this->cake_quantity = NULL;
             return TRUE;
         }
         return FALSE;
     }
 
-    public function add($name_cake, $price, $weight, $calories)
+    /**
+     * Update a cake in database
+     * @param $cake_name
+     * @param $cake_price
+     * @param $cake_weight
+     * @param $cake_calories
+     * @param $cake_quantity
+     * @return bool
+     */
+    public function update($cake_name, $cake_price, $cake_weight, $cake_calories, $cake_quantity)
     {
         $db = model_database::instance();
-        $sql = 'INSERT INTO cake (name_cake, price, weight, calories) values (\'' . $name_cake . '\', ' . $price . ', ' . $weight . ', ' . $calories . ');';
-        $db->execute($sql);
-    }
-
-    public function update($name_cake, $price, $weight, $calories)
-    {
-        $db = model_database::instance();
-        $sql = 'UPDATE cake
-        SET name_cake =\'' .  $name_cake . '\', price =\'' . $price . '\', weight =\'' . $weight .'\', calories=\'' . $calories .'\'
-        WHERE id_cake = \''. $this->id_cake . '\'';
+        $sql = 'UPDATE cakes
+        SET cake_name =\'' .   mysql_real_escape_string($cake_name) . '\', cake_price =\'' . $cake_price . '\', cake_weight =\'' . $cake_weight .'\', cake_calories=\'' . $cake_calories .'\', cake_quantity=\'' .$cake_quantity .'\'
+        WHERE cake_id = \''. $this->id . '\'';
         if ($db->execute($sql)) {
-            $this->name_cake = $name_cake;
-            $this->price = $price;
-            $this->weight = $weight;
-            $this->calories = $calories;
+            $this->cake_name = $cake_name;
+            $this->cake_price = $cake_price;
+            $this->cake_weight = $cake_weight;
+            $this->cake_calories = $cake_calories;
+            $this->cake_quantity = $cake_quantity;
             return TRUE;
             }
         return FALSE;
     }
 
-    //Working progress
+    /**
+     * Get all the ingredients for a cake
+     * @return array
+     */
     public function get_ingredients()
     {
+        $res = array();
         $db = model_database::instance();
-        $sql = 'SELECT ing.id_ingredient, ing.name_ingredient from ingredient as ing inner join ingredient_cake on
-        ingredient_cake.id_ingredient = ing.id_ingredient inner join cake on cake.id_cake = ingredient_cake.id_cake
-        where cake.id_cake =' .$this->id_cake;
-        if ($result = $db->get_row($sql)) {
+        $sql = 'SELECT ing.ingredient_id, ing.ingredient_name from ingredients as ing inner join ingredients_cakes on
+        ingredients_cakes.ic_id_ingredient = ing.ingredient_id inner join cakes on cakes.cake_id = ingredients_cakes.ic_id_cake
+        where cakes.cake_id =' .$this->id;
+        if ($result = $db->get_rows($sql)) {
             $ingredient = new model_ingredient();
-            $ingredient->id_ingredient = $result['id_ingredient'];
-            $ingredient->name_ingredient = $result['name_ingredient'];
-            return $ingredient;
-         }
+            foreach($result as $re) {
+                $ingredient->ingredient_id = $re['ingredient_id'];
+                $ingredient->ingredient_name = $re['ingredient_name'];
+                array_push($res, $re);
+            }
+            return $res;
+        }
 
     }
 
 
 }
-
-$cake = model_cake::create('asaaa', 4, 300, 400);
-//$cake = model_cake::load_by_id(9);
-//$cake->delete();
-//var_dump($cake);
-//$cake2 = $cake->get_ingredients();
-//echo $cake2->name_ingredient;
 
