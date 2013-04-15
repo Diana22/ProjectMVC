@@ -153,6 +153,19 @@ class model_order {
     }
 
     /*
+     * Deletes specified cake from current order.
+     */
+    public function remove_cake($cake_id){
+        $db = model_database::instance();
+        $sql = 'DELETE FROM orders_cakes
+         where oc_id_order=' . $this->id . ' && oc_id_cake=' . $cake_id . ';';
+        if ($db->execute($sql)){
+            return true;
+        }
+        return false;
+    }
+
+    /*
      * Sets the object attributes to those of an array with same keys.
      */
     public function set($array){
@@ -164,5 +177,5 @@ class model_order {
 
 }
 //$model = model_order::get_by_order_id(10);
-//$model->add_cake(2,77);
+//$model->remove_cake(3);
 //var_dump($model);
