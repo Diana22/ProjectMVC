@@ -140,6 +140,32 @@ class model_order {
     }
 
     /*
+     * Adds new items to the current order.
+     */
+    public function add_cake($cake_id, $quantity){
+        $db = model_database::instance();
+        $sql = 'INSERT INTO orders_cakes
+                VALUES ('. $this->id . ',' . $cake_id . ',' . $quantity . ')';
+        if ($db->execute($sql)){
+            return true;
+        }
+        return false;
+    }
+
+    /*
+     * Deletes specified cake from current order.
+     */
+    public function remove_cake($cake_id){
+        $db = model_database::instance();
+        $sql = 'DELETE FROM orders_cakes
+         where oc_id_order=' . $this->id . ' && oc_id_cake=' . $cake_id . ';';
+        if ($db->execute($sql)){
+            return true;
+        }
+        return false;
+    }
+
+    /*
      * Sets the object attributes to those of an array with same keys.
      */
     public function set($array){
@@ -150,7 +176,6 @@ class model_order {
     }
 
 }
-if ($model = model_order::get_by_order_id(10)){
-    $model->update(2,'2222.01.01');
-}
-var_dump($model);
+//$model = model_order::get_by_order_id(10);
+//$model->remove_cake(3);
+//var_dump($model);
