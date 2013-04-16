@@ -28,24 +28,15 @@ class model_account {
     public function validate($username, $pass)
     {
         $db = model_database::instance();
-        $sql = 'SELECT account_type
+        $sql = 'SELECT account_id
                 FROM accounts
                 WHERE account_username = "' . mysql_real_escape_string($username) . '"
 				AND account_pass = "' . md5($pass) . '"';
-
-        if ($result = $db->get_row($sql))
+        if ($result = $db->execute($sql))
         {
-
-            if ($result['account_type'] == 1)
-            {
-                $this->account_type = self::TYPE_ADMIN;
-            }
-            else
-            {
-                $this->account_type = self::TYPE_CLIENT;
-            }
+            return $result['account_type'];
         }
-        return $result['account_type'];
+       return false;
     }
 
     public function update($username, $pass, $type)
@@ -56,17 +47,20 @@ class model_account {
                 WHERE account_id = \'' . $this->id_account . '\'
                 limit 1';
 
-        if($db->execute($sql) == 1){
+        if($result = $db->execute($sql)){
+            $this->username = $result['account_username'];
+            $this->pass = $result['account_pass'];
+            $this->type = $result['account_type'];
             return true;
         }
         return false;
     }
 
-    public static function delete($id_account)
+    public function delete()
     {
         $db = model_database::instance();
         $sql = 'DELETE FROM accounts
-                WHERE account_id = \'' . $id_account . '\';';
+                WHERE account_id = \'' . $this->id_account . '\';';
         if($db->execute($sql)){
             return true;
         }
