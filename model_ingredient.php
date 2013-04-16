@@ -30,7 +30,7 @@ class model_ingredient
             $response->id = $result['ingredient_id'];
             $response->name = $result['ingredient_name'];
             return $response;
-        }
+        };
         return false;
     }
 
@@ -53,28 +53,25 @@ class model_ingredient
                 $return[] = $ingredients;
             }
             ksort($return);
-        }
-        ;
-
+        };
         return $return;
     }
 
     /**
-     * This function adds an ingredients with given name to the database.
+     * This function adds an ingredients with given name.
      * @param $name
      */
     public static function create($name)
     {
         $db = model_database::instance();
-        $sql = 'insert into ingredients
+        $sql = 'INSERT INTO ingredients
                 (ingredient_name)
-                values
+                VALUES
                 (\'' . mysql_real_escape_string($name) . '\');';
         if ($db->execute($sql)) {
             $new_id = $db->last_insert_id();
             return model_ingredient::load_by_id($new_id);
-        }
-        ;
+        };
         return false;
     }
 
@@ -92,8 +89,7 @@ class model_ingredient
         if ($db->execute($sql)) {
             $this->name = mysql_real_escape_string($name);
             return TRUE;
-        }
-        ;
+        };
         return FALSE;
     }
 
@@ -109,16 +105,6 @@ class model_ingredient
             $this->name = null;
             $this->id = null;
 
-        }
-        ;
+        };
     }
-
-
 }
-
-//$ingredients =new model_ingredients;
-//$ingredients->delete('cocos');
-
-$order = model_ingredient::create("cirese");
-//var_dump($order);
-//var_dump($result);
