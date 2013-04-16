@@ -8,6 +8,7 @@ class model_cake {
     var $weight;
     var $calories;
     var $quantity;
+    var $ordered_quantity;
 
     /**
      * Add a new cake in database
