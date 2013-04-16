@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__. "\\database.php";
+include_once __DIR__. "/database.php";
 class model_client {
     var $id;
     var $name;
@@ -61,4 +61,3 @@ class model_client {
     return false;
     }
 }
-model_client::update(6,'aalinaa','ammaaa','0143456789');

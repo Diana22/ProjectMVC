@@ -1,7 +1,7 @@
 <?php
 include_once __DIR__ . "/database.php";
 include_once __DIR__ . "/cake.php";
-include_once __DIR__ . "/model_client.php";
+include_once __DIR__ . "/client.php";
 class model_order {
 
     var $id;
@@ -16,9 +16,10 @@ class model_order {
      */
     public static function get_by_order_id($id){
         $db = model_database::instance();
-        $sql = 'SELECT order_id, order_id_client, order_pickup_date
+        $sql = 'SELECT *
 			    FROM orders
-			    WHERE order_id = ' . $id . ' LIMIT 1;';
+			    WHERE order_id = ' . $id . '
+			    LIMIT 1;';
         if ($result = $db->get_row($sql)) {
             $return = new model_order();
             $return->set($result);
@@ -34,17 +35,19 @@ class model_order {
     */
     public static function get_by_client_id($id){
         $db = model_database::instance();
-        $sql = 'SELECT order_id, order_id_client, order_pickup_date
+        $sql = 'SELECT *
 			    FROM orders
 			    WHERE order_id_client = ' . $id . ';';
         if ($result = $db->get_rows($sql)) {
             $model = new model_order();
+            $return = null;
             foreach ($result as $array)
             {
                 $return[] = $model->set($array);
             }
             return $return;
         }
+        return false;
     }
 
      /*
@@ -55,20 +58,14 @@ class model_order {
     public static function create($client_id, $date){
         $db = model_database::instance();
         $sql = 'INSERT INTO orders
-                (order_id_client, order_pickup_date)
+                    (order_id_client, order_pickup_date)
                 VALUES
-                (' . $client_id . ',\'' . $date . '\');';
+                    (' . $client_id . ',\'' . $date . '\');';
         $db->execute($sql);
         if ($db->get_affected_rows() > 0)
         {
-            $sql = 'SELECT order_id, order_id_client, order_pickup_date
-			    FROM orders
-			    WHERE order_id = \'' . $db->last_insert_id()  . '\';';
-
-            if ($result = $db->get_row($sql)) {
-                $return = new model_order();
-                $return->set($result);
-                return $return;
+            if ($db->last_insert_id()){
+                return model_order::get_by_order_id($db->last_insert_id());
             }
         }
         return false;
@@ -78,23 +75,23 @@ class model_order {
      * Deletes an order the entry corresponding to the current object.
      */
     public function delete(){
-        $success = true;
         $db = model_database::instance();
         $sql = 'DELETE FROM orders
                 WHERE order_id=\'' . $this->id . '\';';
-        if($db->execute($sql)){
-            $success = false;
+        if(!$db->execute($sql)){
+            return false;
         }
 
         $sql = 'DELETE FROM orders_cakes
                 WHERE oc_id_order=\'' . $this->id . '\';';
-        if($db->execute($sql)){
-            $success = false;
+        if(!$db->execute($sql)){
+            return false;
         }
+
         $this->id = null;
         $this->id_client = null;
         $this->pickup_date = null;
-        return $success;
+        return true;
     }
 
     /*
@@ -144,8 +141,11 @@ class model_order {
      */
     public function get_cakes(){
         $db = model_database::instance();
-        $sql = 'SELECT * FROM orders_cakes WHERE oc_id_order=' . $this->id . ';';
+        $sql = 'SELECT *
+                FROM orders_cakes
+                WHERE oc_id_order=' . $this->id . ';';
         if ($rows = $db->get_rows($sql)){
+            $cakes = null;
             foreach($rows as $row){
                 $cake = model_cake::load_by_id($row['oc_id_cake']);
                 $cake->cake_quantity = $row['oc_quantity'] ;
@@ -153,6 +153,7 @@ class model_order {
             }
             return $cakes;
         }
+        return false;
     }
 
     /*
@@ -172,7 +173,3 @@ class model_order {
         return $this;
     }
 }
-//$model = model_order::get_by_order_id(10);
-//$cakes = $model->get_cakes();
-//var_dump($model);
-//var_dump($cakes);

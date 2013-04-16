@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ .'/database.php';
-include_once __DIR__ .'/model_ingredient.php';
+include_once __DIR__ .'/ingredient.php';
 class model_cake {
     var $id;
     var $name;
