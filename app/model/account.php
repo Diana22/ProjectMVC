@@ -105,3 +105,5 @@ class model_account {
         return false;
     }
 }
+//$model = model_account::get_client(5);
+//var_dump($model);
