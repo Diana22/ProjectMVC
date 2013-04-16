@@ -19,11 +19,8 @@ class model_account {
         $sql = 'SELECT account_id
                 FROM accounts where username=\'' . $username . '\' && pass=\'' . md5($pass) . '\';';
        if($result = $db->execute($sql)){
-           $a = new model_account();
-           $a->username = $result['username'];
-           $a->pass = $result['pass'];
-           $a->type = $result['type'];
-           $a->id_account = $result['id_account'];
+           $new_id_account = $db->last_insert_id();
+           return model_account::load_by_id($new_id_account);
        }
         return false;
     }
@@ -105,5 +102,3 @@ class model_account {
         return false;
     }
 }
-//$model = model_account::get_client(5);
-//var_dump($model);
