@@ -6,7 +6,7 @@ class model_account {
     const TYPE_ADMIN = 1;
     const TYPE_CLIENT = 0;
 
-    var $id_account;
+    var $id;
     var $username;
     var $pass;
     var $type;
@@ -19,8 +19,8 @@ class model_account {
         $sql = 'SELECT account_id
                 FROM accounts where username=\'' . $username . '\' && pass=\'' . md5($pass) . '\';';
        if($result = $db->execute($sql)){
-           $new_id_account = $db->last_insert_id();
-           return model_account::load_by_id($new_id_account);
+           $new_id = $db->last_insert_id();
+           return model_account::load_by_id($new_id);
        }
         return false;
     }
@@ -44,7 +44,7 @@ class model_account {
         $db = model_database::instance();
         $sql = 'UPDATE accounts
                 SET account_username =\'' . $username . '\', account_pass = \'' . md5($pass) . '\', account_type = \'' . $type .'\'
-                WHERE account_id = \'' . $this->id_account . '\'
+                WHERE account_id = \'' . $this->id . '\'
                 limit 1';
 
         if($result = $db->execute($sql)){
@@ -60,20 +60,24 @@ class model_account {
     {
         $db = model_database::instance();
         $sql = 'DELETE FROM accounts
-                WHERE account_id = \'' . $this->id_account . '\';';
+                WHERE account_id = \'' . $this->id . '\';';
         if($db->execute($sql)){
-            return true;
+            $this->id = null;
+            $this->username = null;
+            $this->pass = null;
+            $this->type = null;
+                return true;
         }
         return false;
 
     }
 
-    public static function get_client($id_account){
+    public function get_client(){
         $db = model_database::instance();
-        $sql = 'SELECT * FROM clients where client_id_account = \'' . $id_account . '\';';
+        $sql = 'SELECT * FROM clients where client_id = \'' . $this->id . '\';';
         if($result = $db->get_row($sql)){
             $obj = new model_client();
-            $obj->account_id = $id_account;
+            $obj->account_id = $this->id;
             $obj->name = $result['client_name'];
             $obj->adress = $result['client_address'];
             $obj->phone = $result['client_phone'];
@@ -87,7 +91,7 @@ class model_account {
         $sql = 'SELECT * FROM accounts where account_id=' . $account_id;
         if ($result = $db->get_row($sql)){
             $obj = new model_account();
-            $obj->id_account = $account_id;
+            $obj->id = $account_id;
             $obj->pass = $result['account_pass'];
             $obj->type = $result['account_type'];
             $obj->username = $result['account_username'];
