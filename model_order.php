@@ -1,5 +1,7 @@
 <?php
 include_once __DIR__ . "/database.php";
+include_once __DIR__ . "/cake.php";
+include_once __DIR__ . "/model_client.php";
 class model_order {
 
     var $id;
@@ -35,34 +37,6 @@ class model_order {
         $sql = 'SELECT order_id, order_id_client, order_pickup_date
 			    FROM orders
 			    WHERE order_id_client = ' . $id . ';';
-        if ($result = $db->get_rows($sql)) {
-            $model = new model_order();
-            foreach ($result as $array)
-            {
-                $return[] = $model->set($array);
-            }
-            return $return;
-        }
-    }
-
-    /*
-    * Gets all orders that have a cake.
-    * @param $name String to search for.
-    * @return array of orders that have that cake.
-     *
-     *
-     * modify for get_cakes.
-    */
-
-    public static function get_by_cake_name($name){
-        $db = model_database::instance();
-        $sql = 'SELECT order_id, order_id_client, order_pickup_date
-			    FROM orders
-			    INNER JOIN orders_cakes
-			    ON order_id = oc_id_order
-			    INNER JOIN cakes
-			    ON oc_id_cake = cake_id
-			    WHERE cake_name = \'' . $name . '\';';
         if ($result = $db->get_rows($sql)) {
             $model = new model_order();
             foreach ($result as $array)
@@ -158,11 +132,34 @@ class model_order {
     public function remove_cake($cake_id){
         $db = model_database::instance();
         $sql = 'DELETE FROM orders_cakes
-         where oc_id_order=' . $this->id . ' && oc_id_cake=' . $cake_id . ';';
+                WHERE oc_id_order=' . $this->id . ' && oc_id_cake=' . $cake_id . ';';
         if ($db->execute($sql)){
             return true;
         }
         return false;
+    }
+
+    /*
+     * Returnes all cakes within the current order and their quantities.
+     */
+    public function get_cakes(){
+        $db = model_database::instance();
+        $sql = 'SELECT * FROM orders_cakes WHERE oc_id_order=' . $this->id . ';';
+        if ($rows = $db->get_rows($sql)){
+            foreach($rows as $row){
+                $cake = model_cake::load_by_id($row['oc_id_cake']);
+                $cake->cake_quantity = $row['oc_quantity'] ;
+                $cakes[] = $cake;
+            }
+            return $cakes;
+        }
+    }
+
+    /*
+     * Returns a client object that is linked to current order.
+     */
+    public function get_client(){
+        return model_client::load_by_account_id($this->id_client);
     }
 
     /*
@@ -174,8 +171,8 @@ class model_order {
         $this->pickup_date = $array['order_pickup_date'];
         return $this;
     }
-
 }
 //$model = model_order::get_by_order_id(10);
-//$model->remove_cake(3);
+//$cakes = $model->get_cakes();
 //var_dump($model);
+//var_dump($cakes);
