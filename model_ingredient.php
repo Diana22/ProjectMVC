@@ -30,7 +30,7 @@ class model_ingredient
             $response->id = $result['ingredient_id'];
             $response->name = $result['ingredient_name'];
             return $response;
-        };
+        }
         return false;
     }
 
@@ -52,8 +52,7 @@ class model_ingredient
                 $ingredients->id = $array['ingredient_id'];
                 $return[] = $ingredients;
             }
-            ksort($return);
-        };
+        }
         return $return;
     }
 
@@ -68,10 +67,10 @@ class model_ingredient
                 (ingredient_name)
                 VALUES
                 (\'' . mysql_real_escape_string($name) . '\');';
-        if ($db->execute($sql)) {
-            $new_id = $db->last_insert_id();
-            return model_ingredient::load_by_id($new_id);
-        };
+
+        if ($db->execute($sql)){
+            return model_ingredient::load_by_id($db->last_insert_id());
+        }
         return false;
     }
 
@@ -87,9 +86,9 @@ class model_ingredient
         SET ingredient_name=\'' . mysql_real_escape_string($name) . '\'
         WHERE ingredient_id=' . $this->id . ' ;';
         if ($db->execute($sql)) {
-            $this->name = mysql_real_escape_string($name);
+            $this->name = $name;
             return TRUE;
-        };
+        }
         return FALSE;
     }
 
@@ -97,14 +96,14 @@ class model_ingredient
      * This function is deleting an ingredients by given name.
      * @param $name
      */
-    public function delete($name)
+    public function delete()
     {
         $db = model_database::instance();
-        $sql = ' DELETE FROM ingredients WHERE ingredient_name=\'' . mysql_real_escape_string($name) . '\'';
+        $sql = ' DELETE FROM ingredients WHERE ingredient_name=\'' . mysql_real_escape_string($this->name) . '\'';
         if ($db->execute($sql)) {
             $this->name = null;
             $this->id = null;
 
-        };
+        }
     }
 }
