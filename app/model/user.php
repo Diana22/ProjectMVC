@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__. "\\database.php";
+include_once __DIR__. "/database.php";
 class model_user {
     var $name;
     var $adress;

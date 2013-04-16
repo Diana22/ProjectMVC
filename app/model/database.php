@@ -100,5 +100,4 @@ class model_database {
         return mysql_insert_id($this->connection);
     }
 
-
 }

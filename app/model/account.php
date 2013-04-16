@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ . "/database.php";
-include_once __DIR__ . "/model_client.php";
+include_once __DIR__ . "/client.php";
 class model_account {
 
     const TYPE_ADMIN = 1;
@@ -105,5 +105,5 @@ class model_account {
         return false;
     }
 }
-$model = model_account::get_client(5);
-var_dump($model);
+//$model = model_account::get_client(5);
+//var_dump($model);
