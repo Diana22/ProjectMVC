@@ -14,7 +14,7 @@ class model_order {
      * @param $id id to search for
      * @return a specific order.
      */
-    public static function get_by_order_id($id){
+    public static function load_by_id($id){
         $db = model_database::instance();
         $sql = 'SELECT *
 			    FROM orders
@@ -22,7 +22,7 @@ class model_order {
 			    LIMIT 1;';
         if ($result = $db->get_row($sql)) {
             $return = new model_order();
-            $return->set($result);
+            $return->set_proprieties($result['order_id'],$result['order_id_client'],$result['order_pickup_date']);
             return $return;
         }
         return false;
@@ -39,11 +39,12 @@ class model_order {
 			    FROM orders
 			    WHERE order_id_client = ' . $id . ';';
         if ($result = $db->get_rows($sql)) {
-            $model = new model_order();
-            $return = null;
+            $return = array();
             foreach ($result as $array)
             {
-                $return[] = $model->set($array);
+                $model = new model_order();
+                $model->set_proprieties($array['order_id'],$array['order_id_client'],$array['order_pickup_date']);
+                $return[] = $model;
             }
             return $return;
         }
@@ -65,7 +66,7 @@ class model_order {
         if ($db->get_affected_rows() > 0)
         {
             if ($db->last_insert_id()){
-                return model_order::get_by_order_id($db->last_insert_id());
+                return model_order::load_by_id($db->last_insert_id());
             }
         }
         return false;
@@ -148,7 +149,7 @@ class model_order {
             $cakes = null;
             foreach($rows as $row){
                 $cake = model_cake::load_by_id($row['oc_id_cake']);
-                $cake->cake_quantity = $row['oc_quantity'] ;
+                $cake->ordered_quantity = $row['oc_quantity'] ;
                 $cakes[] = $cake;
             }
             return $cakes;
@@ -166,10 +167,9 @@ class model_order {
     /*
      * Sets the object attributes to those of an array with same keys.
      */
-    public function set($array){
-        $this->id = $array['order_id'];
-        $this->id_client = $array['order_id_client'];
-        $this->pickup_date = $array['order_pickup_date'];
-        return $this;
+    public function set_proprieties($order_id,$order_id_client,$order_pickup_date){
+        $this->id = $order_id;
+        $this->id_client = $order_id_client;
+        $this->pickup_date = $order_pickup_date;
     }
 }
