@@ -103,8 +103,9 @@ class model_ingredient
         if ($db->execute($sql)) {
             $this->name = null;
             $this->id = null;
-
+            return TRUE;
         }
+        return FALSE;
     }
 }
 
