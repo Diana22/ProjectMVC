@@ -12,17 +12,17 @@ class controller_account
         // If the form was submitted, validate credentials.
         $form_error = FALSE;
         if (isset($_POST['form']['action'])) {
-            $account = new model_account();
-            $account_id = $account->validate($_POST['form']['user'], $_POST['form']['password']);
-            if (isset($account_id))
+            $account_id = model_account::validate($_POST['form']['user'], $_POST['form']['password']);
+            $account = model_account::load_by_id($account_id);
+            if ($account_id)
             {
                 $_SESSION['myshop']['account_id'] = $account_id;
-                if ($account_id == 1) {
+                if ($account->type == 1) {
                     // Account is admin.
                     header('Location: ' . APP_URL . 'admin');
                     die;
                 }
-                if ($account_id == 0) {
+                if ($account->type == 0) {
                     // Account is client.
                     header('Location: ' . APP_URL);
                     die;
