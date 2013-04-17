@@ -5,7 +5,7 @@ include_once __DIR__ . "/client.php";
 class model_order {
 
     var $id;
-    var $id_client;
+    var $client_id;
     var $pickup_date;
 
 
@@ -22,7 +22,7 @@ class model_order {
 			    LIMIT 1;';
         if ($result = $db->get_row($sql)) {
             $return = new model_order();
-            $return->set_proprieties($result['order_id'],$result['order_id_client'],$result['order_pickup_date']);
+            $return->set_properties($result['order_id'],$result['order_id_client'],$result['order_pickup_date']);
             return $return;
         }
         return false;
@@ -43,7 +43,7 @@ class model_order {
             foreach ($result as $array)
             {
                 $model = new model_order();
-                $model->set_proprieties($array['order_id'],$array['order_id_client'],$array['order_pickup_date']);
+                $model->set_properties($array['order_id'],$array['order_id_client'],$array['order_pickup_date']);
                 $return[] = $model;
             }
             return $return;
@@ -62,12 +62,9 @@ class model_order {
                     (order_id_client, order_pickup_date)
                 VALUES
                     (' . $client_id . ',\'' . $date . '\');';
-        $db->execute($sql);
-        if ($db->get_affected_rows() > 0)
+        if ($db->execute($sql))
         {
-            if ($db->last_insert_id()){
-                return model_order::load_by_id($db->last_insert_id());
-            }
+            return model_order::load_by_id($db->last_insert_id());
         }
         return false;
     }
@@ -85,12 +82,10 @@ class model_order {
 
         $sql = 'DELETE FROM orders_cakes
                 WHERE oc_id_order=\'' . $this->id . '\';';
-        if(!$db->execute($sql)){
-            return false;
-        }
+        $db->execute($sql);
 
         $this->id = null;
-        $this->id_client = null;
+        $this->client_id = null;
         $this->pickup_date = null;
         return true;
     }
@@ -104,7 +99,7 @@ class model_order {
                 SET order_id_client=' . $client_id . ', order_pickup_date=\'' . $pickup_date . '\'
                 WHERE order_id=' . $this->id;
         if($db->execute($sql)){
-            $this->id_client = $client_id;
+            $this->client_id = $client_id;
             $this->pickup_date = $pickup_date;
             return true;
         }
@@ -130,7 +125,7 @@ class model_order {
     public function remove_cake($cake_id){
         $db = model_database::instance();
         $sql = 'DELETE FROM orders_cakes
-                WHERE oc_id_order=' . $this->id . ' && oc_id_cake=' . $cake_id . ';';
+                WHERE oc_id_order=' . $this->id . ' AND oc_id_cake=' . $cake_id . ';';
         if ($db->execute($sql)){
             return true;
         }
@@ -161,15 +156,15 @@ class model_order {
      * Returns a client object that is linked to current order.
      */
     public function get_client(){
-        return model_client::load_by_account_id($this->id_client);
+        return model_client::load_by_id($this->client_id);
     }
 
     /*
      * Sets the object attributes to those of an array with same keys.
      */
-    public function set_proprieties($order_id,$order_id_client,$order_pickup_date){
+    public function set_properties($order_id,$order_id_client,$order_pickup_date){
         $this->id = $order_id;
-        $this->id_client = $order_id_client;
+        $this->client_id = $order_id_client;
         $this->pickup_date = $order_pickup_date;
     }
 }
