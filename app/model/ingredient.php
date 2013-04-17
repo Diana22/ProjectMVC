@@ -99,7 +99,7 @@ class model_ingredient
     public function delete()
     {
         $db = model_database::instance();
-        $sql = ' DELETE FROM ingredients WHERE ingredient_name=\'' . mysql_real_escape_string($this->name) . '\'';
+        $sql = ' DELETE FROM ingredients WHERE ingredient_id=\'' . $this->id . '\'';
         if ($db->execute($sql)) {
             $this->name = null;
             $this->id = null;
@@ -107,3 +107,5 @@ class model_ingredient
         }
     }
 }
+
+
