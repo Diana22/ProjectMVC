@@ -14,10 +14,10 @@ class model_account {
     public static function create($username, $pass, $type){
         $db = model_database::instance();
         $sql = 'INSERT INTO accounts (account_username, account_pass, account_type)
-                VALUES (\'' . $username . '\', \'' .  md5($pass) . '\', ' . $type . ');';
+                VALUES (\'' . mysql_real_escape_string($username) . '\', \'' .  md5($pass) . '\', ' . $type . ');';
         $db->execute($sql);
         $sql = 'SELECT account_id
-                FROM accounts where username=\'' . $username . '\' && pass=\'' . md5($pass) . '\';';
+                FROM accounts where username=\'' . mysql_real_escape_string($username) . '\' && pass=\'' . md5($pass) . '\';';
        if($result = $db->execute($sql)){
            $new_id = $db->last_insert_id();
            return model_account::load_by_id($new_id);
@@ -25,7 +25,7 @@ class model_account {
         return false;
     }
 
-    public function validate($username, $pass)
+    public static function validate($username, $pass)
     {
         $db = model_database::instance();
         $sql = 'SELECT account_id
