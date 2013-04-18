@@ -13,7 +13,6 @@ class controller_cake
     {
         // Include view for this page
         $cakes = model_cake::get_all();
-        $action = 'list';
         @include_once APP_PATH . 'view/cake_list.tpl.php';
         //$cakes = model_cake::get_all();
         //var_dump($cakes);
@@ -24,8 +23,7 @@ class controller_cake
      */
     public static function action_view($params){
 
-        $cakes= model_cake::load_by_id($params[0]);
-        $action = 'view';
-        @include_once APP_PATH . 'view/cake_list.tpl.php';
+        $cake= model_cake::load_by_id($params[0]);
+        @include_once APP_PATH . 'view/cake_view.tpl.php';
     }
 }
