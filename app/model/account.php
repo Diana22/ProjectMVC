@@ -19,7 +19,7 @@ class model_account {
             $new_id = $db->last_insert_id();
             return model_account::load_by_id($new_id);
         }
-
+        return false;
     }
 
     public static function validate($username, $pass)
