@@ -44,7 +44,7 @@ class model_account {
                 WHERE account_id = \'' . $this->id . '\'
                 limit 1';
 
-        if($result = $db->execute($sql)){
+        if($result = $db->get_row($sql)){
             $this->username = $result['account_username'];
             $this->pass = $result['account_pass'];
             $this->type = $result['account_type'];
