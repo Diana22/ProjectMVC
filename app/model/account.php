@@ -30,7 +30,7 @@ class model_account {
 				AND account_pass = "' . md5($pass) . '"';
         if ($result = $db->execute($sql))
         {
-            return $result['account_type'];
+            return $result['account_id'];
         }
        return false;
     }
