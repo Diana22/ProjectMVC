@@ -78,7 +78,7 @@ class model_client {
     public function delete(){
         $db = model_database::instance();
         $sql = 'DELETE FROM clients
-                where client_id_account = \'' . $this->id . '\';';
+                where client_id = \'' . $this->id . '\';';
         if($db->execute($sql)){
             $this->id = null;
             $this->account_id = null;
