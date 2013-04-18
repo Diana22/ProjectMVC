@@ -35,8 +35,6 @@ class controller_account
     }
 
     function action_created(){
-        $account = model_account::create($_POST['form']['username'], $_POST['form']['password'],$_POST['form']['type']);
-
         // Include view for this page.
         include_once APP_PATH . 'view/account_created.tpl.php';
     }
