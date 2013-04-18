@@ -62,8 +62,8 @@ class model_client {
     {
         $db = model_database::instance();
         $sql = 'UPDATE clients
-                SET cliemt_of_account =\'' . $account_id . '\', client_name =\'' . mysql_real_escape_string($name) . '\', client_address = \'' . mysql_real_escape_string($address) . '\', client_phone = \'' . $phone . '\'
-                WHERE client_id_account = \'' . $this->account_id . '\'
+                SET client_id_account =\'' . $account_id . '\', client_name =\'' . mysql_real_escape_string($name) . '\', client_address = \'' . mysql_real_escape_string($address) . '\', client_phone = \'' . $phone . '\'
+                WHERE client_id = \'' . $this->id . '\'
                 limit 1';
         if($db->execute($sql)){
             $this->account_id = $account_id;
@@ -78,7 +78,7 @@ class model_client {
     public function delete(){
         $db = model_database::instance();
         $sql = 'DELETE FROM clients
-                where client_id_account = \'' . $this->id . '\';';
+                where client_id = \'' . $this->id . '\';';
         if($db->execute($sql)){
             $this->id = null;
             $this->account_id = null;
@@ -101,7 +101,5 @@ class model_client {
         return model_order::get_by_client_id($this->id);
     }
 }
-$model = model_client::load_by_id(3);
-$rsl = $model->get_orders();
-var_dump($rsl);
+
 

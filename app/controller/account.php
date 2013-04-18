@@ -13,9 +13,9 @@ class controller_account
         $form_error = FALSE;
         if (isset($_POST['form']['action'])) {
             $account_id = model_account::validate($_POST['form']['user'], $_POST['form']['password']);
+            $account = model_account::load_by_id($account_id);
             if ($account_id)
             {
-                $account = model_account::load_by_id($account_id);
                 $_SESSION['myshop']['account_id'] = $account_id;
                 if ($account->type == 1) {
                     // Account is admin.
@@ -32,5 +32,12 @@ class controller_account
         }
         // Include view for this page.
         include_once APP_PATH . 'view/account_login.tpl.php';
+    }
+
+    function action_created(){
+        $account = model_account::create($_POST['form']['username'], $_POST['form']['password'],$_POST['form']['type']);
+
+        // Include view for this page.
+        include_once APP_PATH . 'view/account_created.tpl.php';
     }
 }
