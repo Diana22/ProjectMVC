@@ -40,4 +40,13 @@ class controller_account
         // Include view for this page.
         include_once APP_PATH . 'view/account_created.tpl.php';
     }
+
+    /**
+     * Logout action.
+     */
+    function action_logout($params) {
+        unset($_SESSION['myshop']['account_id']);
+        header('Location: ' . APP_URL . 'account/login');
+        die;
+    }
 }
