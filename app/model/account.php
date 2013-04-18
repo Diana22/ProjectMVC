@@ -69,17 +69,7 @@ class model_account {
     }
 
     public function get_client(){
-        $db = model_database::instance();
-        $sql = 'SELECT * FROM clients where client_id = \'' . $this->id . '\';';
-        if($result = $db->get_row($sql)){
-            $obj = new model_client();
-            $obj->account_id = $this->id;
-            $obj->name = $result['client_name'];
-            $obj->adress = $result['client_address'];
-            $obj->phone = $result['client_phone'];
-            return $obj;
-        }
-        return false;
+        return model_client::load_by_account_id($this->id);
     }
 
     public static function load_by_id($account_id){
