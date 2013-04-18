@@ -15,10 +15,11 @@ class model_account {
         $db = model_database::instance();
         $sql = 'INSERT INTO accounts (account_username, account_pass, account_type)
                 VALUES (\'' . mysql_real_escape_string($username) . '\', \'' .  md5($pass) . '\', ' . $type . ');';
-        $db->execute($sql);
-        $new_id = $db->last_insert_id();
-        return model_account::load_by_id($new_id);
-
+        if ($db->execute($sql)) {
+            $new_id = $db->last_insert_id();
+            return model_account::load_by_id($new_id);
+        }
+        return false;
     }
 
     public static function validate($username, $pass)
@@ -43,7 +44,7 @@ class model_account {
                 WHERE account_id = \'' . $this->id . '\'
                 limit 1';
 
-        if($result = $db->execute($sql)){
+        if($result = $db->get_row($sql)){
             $this->username = $result['account_username'];
             $this->pass = $result['account_pass'];
             $this->type = $result['account_type'];
