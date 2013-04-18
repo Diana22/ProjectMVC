@@ -15,9 +15,10 @@ class model_account {
         $db = model_database::instance();
         $sql = 'INSERT INTO accounts (account_username, account_pass, account_type)
                 VALUES (\'' . mysql_real_escape_string($username) . '\', \'' .  md5($pass) . '\', ' . $type . ');';
-        $db->execute($sql);
-        $new_id = $db->last_insert_id();
-        return model_account::load_by_id($new_id);
+        if ($db->execute($sql)) {
+            $new_id = $db->last_insert_id();
+            return model_account::load_by_id($new_id);
+        }
 
     }
 
