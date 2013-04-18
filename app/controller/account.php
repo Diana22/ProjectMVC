@@ -43,7 +43,9 @@ class controller_account
      * Logout action.
      */
     function action_logout($params) {
+        // Unset session variable.
         unset($_SESSION['myshop']['account_id']);
+        // Redirect to login form.
         header('Location: ' . APP_URL . 'account/login');
         die;
     }
