@@ -39,7 +39,7 @@ class model_account {
     {
         $db = model_database::instance();
         $sql = 'UPDATE accounts
-                SET account_username =\'' . $username . '\', account_pass = \'' . md5($pass) . '\', account_type = \'' . $type .'\'
+                SET account_username =\'' .  mysql_real_escape_string($username) . '\', account_pass = \'' . md5($pass) . '\', account_type = \'' . $type .'\'
                 WHERE account_id = \'' . $this->id . '\'
                 limit 1';
 
