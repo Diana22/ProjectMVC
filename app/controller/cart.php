@@ -23,4 +23,10 @@ class controller_cart
         @include_once APP_PATH . 'view/cart_added.tpl.php';
     }
 
+    public function  action_emptied()
+    {
+        // Include view for this page
+        @include_once APP_PATH . 'view/cart_emptied.tpl.php';
+    }
+
 }
