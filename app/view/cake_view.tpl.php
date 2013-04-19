@@ -22,9 +22,19 @@
     <h3>Ingredients</h3>
     <ol>
         <?php foreach ($ingredients as $key => $ingredient) : ?>
-            <li><?php echo $ingredient->name; ?></li>
+            <li>
+                <?php echo $ingredient->name; ?>
+                <?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
+                <a href=<?php echo APP_URL . "ingredient/edit" ?> >Edit</a>
+                <a href=<?php echo APP_URL . "ingredient/delete" ?> >Delete</a>
+                <?php endif; ?>
+            </li>
         <?php endforeach; ?>
     </ol>
+<?php endif; ?>
+<?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
+    <a href=<?php echo APP_URL . "cake/edit" ?> >Edit</a>
+    <a href=<?php echo APP_URL . "cake/delete" ?> >Delete</a>
 <?php endif; ?>
 
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php';
