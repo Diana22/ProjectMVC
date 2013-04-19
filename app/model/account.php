@@ -1,6 +1,5 @@
 <?php
-include_once __DIR__ . "/database.php";
-include_once __DIR__ . "/client.php";
+
 class model_account {
 
     const TYPE_ADMIN = 1;
@@ -25,13 +24,14 @@ class model_account {
     public static function validate($username, $pass)
     {
         $db = model_database::instance();
+
         $sql = 'SELECT account_id
                 FROM accounts
                 WHERE account_username = "' . mysql_real_escape_string($username) . '"
 				AND account_pass = "' . md5($pass) . '"';
-        if ($result = $db->execute($sql))
-        {
-            return $result;
+
+        if ($result = $db->get_row($sql)) {
+            return $result['account_id'];
         }
        return false;
     }

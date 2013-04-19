@@ -3,7 +3,6 @@
  * Class for handling database connections.
  */
 
-include_once "../config/config.php";
 class model_database {
 
 	// Connection object
@@ -70,8 +69,10 @@ class model_database {
 	 * Does a query on database and returns first row.
 	 */
 	public function get_row($sql) {
-	    $result = mysql_query($sql, $this->connection);
-	    return mysql_fetch_assoc($result);
+	    if ($result = mysql_query($sql, $this->connection)) {
+		    return mysql_fetch_assoc($result);
+	    }
+	    return FALSE;
 	}
 
 	/**

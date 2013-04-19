@@ -1,9 +1,12 @@
 <?php @include APP_PATH . 'view/snippets/header.tpl.php'; ?>
+ <h2>Admin area</h2>
 
-<h2>Administrare</h2>
 
-<p>Bine ai venit, <?php echo $admin->name; ?>!</p>
+    <a href="<?php echo APP_URL; ?>admin/ingredients/">List of ingredients</a>
+    <br />
+    <a href="<?php echo APP_URL; ?>cakestore/admin/list/">List of cakes</a>
+    <br />
+    <a href="<?php echo APP_URL; ?>cakestore/admin/orders/">List of orders</a>
 
-<p>Aici vin optiunile de administrare produse / stoc / comenzi etc</p>
 
 <?php @include APP_PATH . 'view/snippets/footer.tpl.php'; ?>
