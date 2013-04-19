@@ -1,92 +1,52 @@
 <?php
-include_once __DIR__ . "/database.php";
-include_once __DIR__ . "/client.php";
-class model_account {
+@include_once __DIR__ . "/../model/user.php";
+class controller_account
+{
 
-    const TYPE_ADMIN = 1;
-    const TYPE_CLIENT = 0;
-
-    var $id;
-    var $username;
-    var $pass;
-    var $type;
-
-    public static function create($username, $pass, $type){
-        $db = model_database::instance();
-        $sql = 'INSERT INTO accounts (account_username, account_pass, account_type)
-                VALUES (\'' . mysql_real_escape_string($username) . '\', \'' .  md5($pass) . '\', ' . $type . ');';
-        if ($db->execute($sql)) {
-            $new_id = $db->last_insert_id();
-            return model_account::load_by_id($new_id);
-        }
-        return false;
-    }
-
-    public static function validate($username, $pass)
+    /**
+     * Login page.
+     */
+    function action_login($params)
     {
-        $db = model_database::instance();
-        $sql = 'SELECT account_id
-                FROM accounts
-                WHERE account_username = "' . mysql_real_escape_string($username) . '"
-				AND account_pass = "' . md5($pass) . '"';
-        if ($result = $db->execute($sql))
-        {
-            return $result;
+
+        // If the form was submitted, validate credentials.
+        $form_error = FALSE;
+        if (isset($_POST['form']['action'])) {
+            $account_id = model_account::validate($_POST['form']['user'], $_POST['form']['password']);
+            $account = model_account::load_by_id($account_id);
+            if ($account_id)
+            {
+                $_SESSION['myshop']['account_id'] = $account_id;
+                if ($account->type == 1) {
+                    // Account is admin.
+                    header('Location: ' . APP_URL . 'admin');
+                    die;
+                }
+                if ($account->type == 0) {
+                    // Account is client.
+                    header('Location: ' . APP_URL);
+                    die;
+                }
+            }
+            $form_error = TRUE;
         }
-       return false;
+        // Include view for this page.
+        include_once APP_PATH . 'view/account_login.tpl.php';
     }
 
-    public function update($username, $pass, $type)
-    {
-        $db = model_database::instance();
-
-        $sql = 'UPDATE accounts
-                SET account_username =\'' .  mysql_real_escape_string($username) . '\', 
-                    account_pass = \'' . md5($pass) . '\', 
-                    account_type = ' . $type . '
-                WHERE account_id = ' . $this->id;
-
-        if ($db->execute($sql)){
-            $this->username = $username;
-            $this->pass = $pass;
-            $this->type = $type;
-            
-            return true;
-        }
-        return false;
+    function action_created(){
+        // Include view for this page.
+        include_once APP_PATH . 'view/account_created.tpl.php';
     }
 
-    public function delete()
-    {
-        $db = model_database::instance();
-        $sql = 'DELETE FROM accounts
-                WHERE account_id = \'' . $this->id . '\';';
-        if($db->execute($sql)){
-            $this->id = null;
-            $this->username = null;
-            $this->pass = null;
-            $this->type = null;
-                return true;
-        }
-        return false;
-
-    }
-
-    public function get_client(){
-        return model_client::load_by_account_id($this->id);
-    }
-
-    public static function load_by_id($account_id){
-        $db = model_database::instance();
-        $sql = 'SELECT * FROM accounts where account_id=' . $account_id;
-        if ($result = $db->get_row($sql)){
-            $obj = new model_account();
-            $obj->id = $account_id;
-            $obj->pass = $result['account_pass'];
-            $obj->type = $result['account_type'];
-            $obj->username = $result['account_username'];
-            return $obj;
-        }
-        return false;
+    /**
+     * Logout action.
+     */
+    function action_logout($params) {
+        // Unset session variable.
+        unset($_SESSION['myshop']['account_id']);
+        // Redirect to login form.
+        header('Location: ' . APP_URL . 'account/login');
+        die;
     }
 }
