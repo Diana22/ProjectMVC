@@ -13,6 +13,7 @@ class controller_account
         $form_error = FALSE;
         if (isset($_POST['form']['action'])) {
             $account_id = model_account::validate($_POST['form']['user'], $_POST['form']['password']);
+
             $account = model_account::load_by_id($account_id);
             if ($account_id) {
                 $_SESSION['myshop']['account_id'] = $account_id;

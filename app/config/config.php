@@ -1,29 +1,24 @@
 <?php
 
 // Global config
-$config = array(
 
-	// App domain
-	'domain' => NULL,
+// App domain
+$config['domain'] = NULL;
 
-	// App folder
-	'folder' => NULL,
+// App folder
+$config['folder'] = NULL;
 
-	// Database
-	'database' => array(
-		'server'   => 'localhost',
-		'user'     => NULL,
-		'password' => NULL,
-		'name' => NULL,
-	),
+// Database
+$config['database']['server'] =   'localhost';
+$config['database']['user'] =     NULL;
+$config['database']['password'] = NULL;
+$config['database']['name'] =     NULL;
 
-	'default_controller' => 'home',
-
-	'default_action' => 'index',
-
-);
+// Default page
+$config['default_controller'] = 'home';
+$config['default_action'] =     'index';
 
 // Include local config
-if (file_exists(__DIR__ . '/config.local.php')) {
-	@include_once __DIR__ . '/config.local.php';
+if (file_exists(APP_PATH . '/config/config.local.php')) {
+	@include_once APP_PATH . '/config/config.local.php';
 }
