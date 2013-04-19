@@ -18,13 +18,13 @@
     <p>Available quantity: <?php echo $cake->quantity; ?> </p>
 <?php endif; ?>
 
-<?php
-if ($ingredients = $cake->get_ingredients()): ?>
+<?php if ($ingredients = $cake->get_ingredients()) : ?>
     <h3>Ingredients</h3>
     <ol>
         <?php foreach ($ingredients as $key => $ingredient) : ?>
-            <li><?php echo $ingredient['ingredient_name']; ?></li>
+            <li><?php echo $ingredient->name; ?></li>
         <?php endforeach; ?>
     </ol>
 <?php endif; ?>
+
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php';

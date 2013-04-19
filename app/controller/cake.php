@@ -8,8 +8,7 @@
  */
 class controller_cake
 {
-    public static function  action_list($params)
-    {
+    public static function  action_list($params) {
         $cakes = model_cake::get_all();
 
         // Include view for this page

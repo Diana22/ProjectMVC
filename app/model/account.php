@@ -39,15 +39,18 @@ class model_account {
     public function update($username, $pass, $type)
     {
         $db = model_database::instance();
-        $sql = 'UPDATE accounts
-                SET account_username =\'' .  mysql_real_escape_string($username) . '\', account_pass = \'' . md5($pass) . '\', account_type = \'' . $type .'\'
-                WHERE account_id = \'' . $this->id . '\'
-                limit 1';
 
-        if($result = $db->get_row($sql)){
-            $this->username = $result['account_username'];
-            $this->pass = $result['account_pass'];
-            $this->type = $result['account_type'];
+        $sql = 'UPDATE accounts
+                SET account_username =\'' .  mysql_real_escape_string($username) . '\', 
+                    account_pass = \'' . md5($pass) . '\', 
+                    account_type = ' . $type . '
+                WHERE account_id = ' . $this->id;
+
+        if ($db->execute($sql)){
+            $this->username = $username;
+            $this->pass = $pass;
+            $this->type = $type;
+            
             return true;
         }
         return false;
