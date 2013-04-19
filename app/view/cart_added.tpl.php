@@ -2,6 +2,6 @@
 
     <h2>The product was added to the cart.</h2>
 
-    <a href= <?php echo APP_URL . "cake/list" ?>>Back to cakesa list.</a>
+    <a href= <?php echo APP_URL . "cake/list" ?>>Back to cakes list.</a>
 
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php'; ?>
