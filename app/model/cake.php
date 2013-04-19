@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ .'/database.php';
-include_once __DIR__ .'/model_ingredient.php';
+include_once __DIR__ .'/ingredient.php';
 class model_cake {
     var $id;
     var $name;
@@ -170,8 +170,3 @@ class model_cake {
     }
 
 }
-
-
-$cake = model_cake::load_by_id(1);
-$cake2 = $cake->get_ingredients();
-var_dump($cake2);
