@@ -42,7 +42,6 @@ class controller_cake
 
         $form_error = FALSE;
         if (isset($_POST['form']['action'])) {
-
             $cake->update($_POST['form']['name'], $_POST['form']['price'], $_POST['form']['weight'], $_POST['form']['calories'],
                 $_POST['form']['quantity']);
             header('Location: ' . APP_URL . 'cake/updated');
