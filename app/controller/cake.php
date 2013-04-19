@@ -6,16 +6,13 @@
  * Time: 10:29 AM
  * To change this template use File | Settings | File Templates.
  */
-@include_once 'C:/wamp/www/cakestore/app/model/cake.php';
 class controller_cake
 {
-    public static function  action_list($params)
-    {
-        // Include view for this page
+    public static function  action_list($params) {
         $cakes = model_cake::get_all();
+
+        // Include view for this page
         @include_once APP_PATH . 'view/cake_list.tpl.php';
-        //$cakes = model_cake::get_all();
-        //var_dump($cakes);
     }
 
     /*
@@ -24,6 +21,7 @@ class controller_cake
     public static function action_view($params){
 
         $cake= model_cake::load_by_id($params[0]);
+
         @include_once APP_PATH . 'view/cake_view.tpl.php';
     }
 }
