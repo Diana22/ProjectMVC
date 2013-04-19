@@ -18,12 +18,9 @@ class controller_cake
         //var_dump($cakes);
     }
 
-    /*
-     * View a specific cake.
-     */
-    public static function action_view($params){
+    public function action_deleted(){
+        // Include view for this page
+        @include_once APP_PATH . 'view/cake_deleted.tpl.php';
 
-        $cake= model_cake::load_by_id($params[0]);
-        @include_once APP_PATH . 'view/cake_view.tpl.php';
     }
 }
