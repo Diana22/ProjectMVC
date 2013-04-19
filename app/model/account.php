@@ -1,6 +1,5 @@
 <?php
-include_once __DIR__ . "/database.php";
-include_once __DIR__ . "/client.php";
+
 class model_account {
 
     const TYPE_ADMIN = 1;
@@ -31,35 +30,32 @@ class model_account {
     public function validate($username, $pass)
     {
         $db = model_database::instance();
-        $sql = 'SELECT account_type
+        $sql = 'SELECT account_id
                 FROM accounts
                 WHERE account_username = "' . mysql_real_escape_string($username) . '"
 				AND account_pass = "' . md5($pass) . '"';
 
-        if ($result = $db->get_row($sql))
-        {
+        if ($result = $db->get_row($sql)) {
 
-            if ($result['account_type'] == 1)
-            {
-                $this->account_type = self::TYPE_ADMIN;
-            }
-            else
-            {
-                $this->account_type = self::TYPE_CLIENT;
-            }
+            return $result['account_id'];
         }
-        return $result['account_type'];
+       return false;
     }
 
     public function update($username, $pass, $type)
     {
         $db = model_database::instance();
         $sql = 'UPDATE accounts
-                SET account_username =\'' . $username . '\', account_pass = \'' . md5($pass) . '\', account_type = \'' . $type .'\'
-                WHERE account_id = \'' . $this->id_account . '\'
-                limit 1';
+                SET account_username =\'' .  mysql_real_escape_string($username) . '\', 
+                    account_pass = \'' . md5($pass) . '\', 
+                    account_type = ' . $type . '
+                WHERE account_id = ' . $this->id;
 
-        if($db->execute($sql) == 1){
+        if ($db->execute($sql)){
+            $this->username = $username;
+            $this->pass = $pass;
+            $this->type = $type;
+
             return true;
         }
         return false;
@@ -69,26 +65,20 @@ class model_account {
     {
         $db = model_database::instance();
         $sql = 'DELETE FROM accounts
-                WHERE account_id = \'' . $id_account . '\';';
+                WHERE account_id = \'' . $this->id . '\';';
         if($db->execute($sql)){
+            $this->id = null;
+            $this->username = null;
+            $this->pass = null;
+            $this->type = null;
             return true;
         }
         return false;
 
     }
 
-    public static function get_client($id_account){
-        $db = model_database::instance();
-        $sql = 'SELECT * FROM clients where client_id_account = \'' . $id_account . '\';';
-        if($result = $db->get_row($sql)){
-            $obj = new model_client();
-            $obj->account_id = $id_account;
-            $obj->name = $result['client_name'];
-            $obj->adress = $result['client_address'];
-            $obj->phone = $result['client_phone'];
-            return $obj;
-        }
-        return false;
+    public function get_client(){
+        return model_client::load_by_account_id($this->id);
     }
 
     public static function load_by_id($account_id){
@@ -96,7 +86,7 @@ class model_account {
         $sql = 'SELECT * FROM accounts where account_id=' . $account_id;
         if ($result = $db->get_row($sql)){
             $obj = new model_account();
-            $obj->id_account = $account_id;
+            $obj->id = $account_id;
             $obj->pass = $result['account_pass'];
             $obj->type = $result['account_type'];
             $obj->username = $result['account_username'];
