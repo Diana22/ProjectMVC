@@ -8,8 +8,12 @@
  */
 class controller_cake
 {
+<<<<<<< HEAD
     public static function  action_list($params)
     {
+=======
+    public function  action_list($params) {
+>>>>>>> 1c016585f2512610d378e8703b516ce9487c3e92
         $cakes = model_cake::get_all();
 
         // Include view for this page
@@ -19,7 +23,7 @@ class controller_cake
     /*
      * View a specific cake.
      */
-    public static function action_view($params)
+    public function action_view($params)
     {
 
         $cake = model_cake::load_by_id($params[0]);
@@ -35,6 +39,7 @@ class controller_cake
 
     }
 
+<<<<<<< HEAD
     public function action_edit($params)
     {
         @include_once APP_PATH . 'model/cake.php';
@@ -51,5 +56,17 @@ class controller_cake
 
         @include APP_PATH . 'view/cake_edit.tpl.php';
 
+=======
+    /*
+     * Delete a specific cake by id.
+     */
+    public function action_delete($params)
+    {
+        @include_once APP_PATH . 'model/cake.php';
+        $cake = model_cake::load_by_id($params[0]);
+        if ($cake->delete()){
+            header('Location:' . APP_URL . 'cake/deleted');
+        }
+>>>>>>> 1c016585f2512610d378e8703b516ce9487c3e92
     }
 }

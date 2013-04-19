@@ -2,7 +2,11 @@
 /**
  * Class for handling database connections.
  */
+<<<<<<< HEAD
 include_once "../config/config.php";
+=======
+
+>>>>>>> 1c016585f2512610d378e8703b516ce9487c3e92
 class model_database {
 
 	// Connection object
@@ -68,9 +72,17 @@ class model_database {
 	/**
 	 * Does a query on database and returns first row.
 	 */
+<<<<<<< HEAD
 	public  function get_row($sql) {
 	    $result = mysql_query($sql, $this->connection);
 	    return mysql_fetch_assoc($result);
+=======
+	public function get_row($sql) {
+	    if ($result = mysql_query($sql, $this->connection)) {
+		    return mysql_fetch_assoc($result);
+	    }
+	    return FALSE;
+>>>>>>> 1c016585f2512610d378e8703b516ce9487c3e92
 	}
 
 	/**
