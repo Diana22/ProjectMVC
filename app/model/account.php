@@ -5,7 +5,7 @@ class model_account {
     const TYPE_ADMIN = 1;
     const TYPE_CLIENT = 0;
 
-    var $id;
+    var $id_account;
     var $username;
     var $pass;
     var $type;
@@ -13,24 +13,30 @@ class model_account {
     public static function create($username, $pass, $type){
         $db = model_database::instance();
         $sql = 'INSERT INTO accounts (account_username, account_pass, account_type)
-                VALUES (\'' . mysql_real_escape_string($username) . '\', \'' .  md5($pass) . '\', ' . $type . ');';
-        if ($db->execute($sql)) {
-            $new_id = $db->last_insert_id();
-            return model_account::load_by_id($new_id);
+                VALUES (\'' . $username . '\', \'' .  md5($pass) . '\', ' . $type . ');';
+        $db->execute($sql);
+        $sql = 'SELECT account_id
+                FROM accounts where username=\'' . $username . '\' && pass=\'' . md5($pass) . '\';';
+        if($result = $db->execute($sql)){
+            $a = new model_account();
+            $a->username = $result['username'];
+            $a->pass = $result['pass'];
+            $a->type = $result['type'];
+            $a->id_account = $result['id_account'];
         }
         return false;
     }
 
-    public static function validate($username, $pass)
+    public function validate($username, $pass)
     {
         $db = model_database::instance();
-
         $sql = 'SELECT account_id
                 FROM accounts
                 WHERE account_username = "' . mysql_real_escape_string($username) . '"
 				AND account_pass = "' . md5($pass) . '"';
 
         if ($result = $db->get_row($sql)) {
+
             return $result['account_id'];
         }
        return false;
@@ -39,7 +45,6 @@ class model_account {
     public function update($username, $pass, $type)
     {
         $db = model_database::instance();
-
         $sql = 'UPDATE accounts
                 SET account_username =\'' .  mysql_real_escape_string($username) . '\', 
                     account_pass = \'' . md5($pass) . '\', 
@@ -50,13 +55,13 @@ class model_account {
             $this->username = $username;
             $this->pass = $pass;
             $this->type = $type;
-            
+
             return true;
         }
         return false;
     }
 
-    public function delete()
+    public static function delete($id_account)
     {
         $db = model_database::instance();
         $sql = 'DELETE FROM accounts
@@ -66,7 +71,7 @@ class model_account {
             $this->username = null;
             $this->pass = null;
             $this->type = null;
-                return true;
+            return true;
         }
         return false;
 
