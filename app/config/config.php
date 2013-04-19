@@ -24,6 +24,6 @@ $config = array(
 );
 
 // Include local config
-if (file_exists(__DIR__ . '/config.local.php')) {
-	@include_once __DIR__ . '/config.local.php';
+if (file_exists( __DIR__. '/config.local.php')) {
+	@include_once __DIR__.'/config.local.php';
 }

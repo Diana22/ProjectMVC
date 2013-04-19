@@ -1,45 +1,36 @@
 <?php
 include_once __DIR__. "/database.php";
-include_once __DIR__ . "/account.php";
-include_once __DIR__ . "/order.php";
 class model_client {
     var $id;
     var $name;
-    var $address;
+    var $adress;
     var $phone;
     var $account_id;
 
-    public static function load_by_id($client_id){
+    public static function update($account_id,$name, $adress, $phone)
+    {
         $db = model_database::instance();
-        $sql = 'SELECT *
-                FROM clients
-                WHERE client_id = \'' . $client_id . '\';';
-        if($result = $db->get_row($sql) )
-        {
-            $obj = new model_client();
-            $obj->id = $client_id;
-            $obj->account_id = $result['client_id_account'];
-            $obj->name = $result['client_name'];
-            $obj->address = $result['client_address'];
-            $obj->phone = $result['client_phone'];
-            return $obj;
+        $sql = 'UPDATE accounts
+                SET  client_name =\'' . $name . '\', client_adress = \'' . $adress . ', client_phone = \'' . $phone . '\'
+                WHERE client_id_account = \'' . $account_id . '\' ;';
+        if($db->execute($sql)){
+            return true;
         }
         return false;
     }
 
-    public static function load_by_account_id($id_account){
+    public static function load_by_account_id($id){
         $db = model_database::instance();
-        $sql = 'SELECT *
+        $sql = 'SELECT client_id_account, client_name, client_address, client_phone
                 FROM clients
-                WHERE client_id_account = \'' . $id_account . '\';';
-        if($result = $db -> get_row($sql) )
+                WHERE clients_id_account = \'' . $id . '\';';
+        if($result = $db ->execute($sql) )
         {
             $obj = new model_client();
-            $obj->id = $result['client_id'];
-            $obj->id_account = $result['client_id_account'];
-            $obj->name = $result['client_name'];
-            $obj->address =$result['client_address'];
-            $obj->phone = $result['client_phone'];
+            $obj->id = $result['id'];
+            $obj->name = $result['name'];
+            $obj->address =$result['address'];
+            $obj->phone = $result['phone'];
             return $obj;
         }
         return false;
@@ -47,59 +38,26 @@ class model_client {
 
     public static function create($account_id, $name, $address, $phone){
         $db = model_database::instance();
-        $sql = 'INSERT INTO clients
-                    (client_id_account, client_name, client_address, client_phone)
-                VALUES
-                    (\'' . $account_id . '\', \'' .  mysql_real_escape_string($name) .  '\', \'' . mysql_real_escape_string($address) . '\',\'' .  $phone . '\') ;';
-        if($db->execute($sql)){
-            $new_account_id = $db->last_insert_id();
-            return model_client::load_by_id($new_account_id);
+        $sql = 'INSERT INTO clients (client_id_account, client_name, client_address, client_phone)
+                VALUES \'' . $account_id . '\', \'' .  $name .  '\', \'' . $address . '\',\'' .  $phone . '\' ;';
+        if ($db->execute($sql)){
+            $model = new model_client();
+            $model->account_id = $account_id;
+            $model->adress = $address;
+            $model->name = $name;
+            $model->phone = $phone;
+            return $model;
         }
         return false;
     }
 
-    public function update($name, $address, $phone, $account_id)
-    {
-        $db = model_database::instance();
-        $sql = 'UPDATE clients
-                SET client_id_account =\'' . $account_id . '\', client_name =\'' . mysql_real_escape_string($name) . '\', client_address = \'' . mysql_real_escape_string($address) . '\', client_phone = \'' . $phone . '\'
-                WHERE client_id = \'' . $this->id . '\'
-                limit 1';
-        if($db->execute($sql)){
-            $this->account_id = $account_id;
-            $this->name = $name;
-            $this->address = $address;
-            $this->phone = $phone;
-            return true;
-        }
-        return false;
-    }
-
-    public function delete(){
+    public static function delete($id){
         $db = model_database::instance();
         $sql = 'DELETE FROM clients
-                where client_id = \'' . $this->id . '\';';
+                where client_id_account = \'' . $id . '\';';
         if($db->execute($sql)){
-            $this->id = null;
-            $this->account_id = null;
-            $this->name = null;
-            $this->address = null;
-            $this->phone = null;
             return true;
         }
-    return false;
-    }
-
-    public function get_account(){
-
-        return model_account::load_by_id($this->account_id);
-
-    }
-
-    public function get_orders(){
-
-        return model_order::get_by_client_id($this->id);
+        return false;
     }
 }
-
-
