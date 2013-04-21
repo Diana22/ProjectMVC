@@ -1,7 +1,5 @@
 <?php
-include_once __DIR__ . "/database.php";
-include_once __DIR__ . "/cake.php";
-include_once __DIR__ . "/client.php";
+
 class model_order {
 
     var $id;
@@ -14,7 +12,7 @@ class model_order {
      * @param $id id to search for
      * @return a specific order.
      */
-    public static function get_by_order_id($id){
+    public static function load_by_id($id){
         $db = model_database::instance();
         $sql = 'SELECT *
 			    FROM orders
@@ -33,7 +31,7 @@ class model_order {
     * @param $id id to search for
     * @return array of orders made by client.
     */
-    public static function get_by_client_id($id){
+    public static function load_by_client_id($id){
         $db = model_database::instance();
         $sql = 'SELECT *
 			    FROM orders
@@ -61,11 +59,9 @@ class model_order {
                     (order_id_client, order_pickup_date)
                 VALUES
                     (' . $client_id . ',\'' . $date . '\');';
-        $db->execute($sql);
-        if ($db->get_affected_rows() > 0)
-        {
+        if ($db->execute($sql)) {
             if ($db->last_insert_id()){
-                return model_order::get_by_order_id($db->last_insert_id());
+                return model_order::load_by_id($db->last_insert_id());
             }
         }
         return false;

@@ -14,7 +14,6 @@ class controller_cake
      */
     public function action_view($params)
     {
-        @include_once APP_PATH . 'model/cake.php';
         $cake = model_cake::load_by_id($params[0]);
         @include_once APP_PATH . 'view/cake_view.tpl.php';
     }

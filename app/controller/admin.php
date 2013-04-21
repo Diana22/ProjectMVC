@@ -10,8 +10,8 @@ class controller_admin {
 	function action_index($params) {
 
 		// Admin must be logged in to access this page
-		if (!$admin = model_admin::load_by_id($_SESSION['myshop']['admin_user_id'])) {
-			header('Location: ' . APP_URL . 'admin/login');
+		if (!($account = model_account::load_by_id($_SESSION['myshop']['account_id'])) || $account->type != model_account::TYPE_ADMIN) {
+			header('Location: ' . APP_URL . 'account/login/');
 			die;
 		}
 
@@ -37,6 +37,18 @@ class controller_admin {
 
 		// Include view for this page
 		@include_once APP_PATH . 'view/admin_login.tpl.php';
+	}
+
+
+	/**
+	 * Lists ingredients.
+	 */
+	function action_ingredients($params) {
+
+		$ingredients = model_ingredient::get_all();
+
+		// Include view for this page
+		@include_once APP_PATH . 'view/admin_ingredients.tpl.php';
 	}
 
 	/**

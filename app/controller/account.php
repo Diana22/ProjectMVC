@@ -1,5 +1,5 @@
 <?php
-@include_once __DIR__ . "/../model/user.php";
+
 class controller_account
 {
 
@@ -8,7 +8,6 @@ class controller_account
      */
     function action_login($params)
     {
-
         // If the form was submitted, validate credentials.
         $form_error = FALSE;
         if (isset($_POST['form']['action'])) {
@@ -62,4 +61,11 @@ class controller_account
         }
         @include_once APP_PATH . 'view/account_create.tpl.php';
     }
+
+    public function action_updated() {
+        // Include view for this page
+        @include_once APP_PATH . 'view/account_updated.tpl.php';
+
+    }
+
 }

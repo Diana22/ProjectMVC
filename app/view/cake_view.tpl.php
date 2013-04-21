@@ -15,7 +15,20 @@
 <?php endif; ?>
 
 <?php if ($cake->quantity): ?>
-    <p>Available quantity: <?php echo $cake->quantity; ?> </p>
+    <h3>Add to cart</h3>
+    <form action="<?php echo APP_URL; ?>cart/add" method="post">
+        <input type="hidden" name="form[cake_id]" value="<?php echo $cake->id ?>" />
+        <label>Quantity
+            <select name="form[quantity]">
+                <?php for ($i = 1; $i <= $cake->quantity; $i ++) : ?>
+                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                <?php endfor ?>
+            </select>
+        </label>
+        <br />
+        <input type="submit" name="form[action]" value="Add" />
+    </form>
+
 <?php endif; ?>
 
 <?php if ($ingredients = $cake->get_ingredients()) : ?>
@@ -25,13 +38,14 @@
             <li>
                 <?php echo $ingredient->name; ?>
                 <?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
-                <a href=<?php echo APP_URL . "ingredient/edit" ?> >Edit</a>
-                <a href=<?php echo APP_URL . "ingredient/delete" ?> >Delete</a>
+                    <a href=<?php echo APP_URL . "ingredient/edit" ?> >Edit</a>
+                    <a href=<?php echo APP_URL . "ingredient/delete" ?> >Delete</a>
                 <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ol>
 <?php endif; ?>
+
 <?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
     <a href=<?php echo APP_URL . "cake/edit" ?> >Edit</a>
     <a href=<?php echo APP_URL . "cake/delete" ?> >Delete</a>

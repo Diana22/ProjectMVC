@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__. "/database.php";
+
 class model_client {
     var $id;
     var $name;
@@ -21,16 +21,17 @@ class model_client {
 
     public static function load_by_account_id($id){
         $db = model_database::instance();
-        $sql = 'SELECT client_id_account, client_name, client_address, client_phone
+        $sql = 'SELECT *
                 FROM clients
-                WHERE clients_id_account = \'' . $id . '\';';
-        if($result = $db ->execute($sql) )
+                WHERE client_id_account = ' . $id;
+        if($result = $db->get_row($sql) )
         {
             $obj = new model_client();
-            $obj->id = $result['id'];
-            $obj->name = $result['name'];
-            $obj->address =$result['address'];
-            $obj->phone = $result['phone'];
+            $obj->id = $result['client_id'];
+            $obj->name = $result['client_name'];
+            $obj->address =$result['client_address'];
+            $obj->phone = $result['client_phone'];
+            $obj->account_id = $result['client_id_account'];
             return $obj;
         }
         return false;

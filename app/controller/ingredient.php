@@ -1,5 +1,4 @@
 <?php
-@include_once __DIR__ . "../model/ingredient.php";
 
 class controller_ingredient
 {
