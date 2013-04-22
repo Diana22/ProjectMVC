@@ -1,44 +1,110 @@
 <?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: Andrada
+ * Date: 4/12/13
+ * Time: 11:54 AM
+ * To change this template use File | Settings | File Templates.
+ */
 
-class controller_ingredient
+include_once __DIR__ . "/database.php";
+class model_ingredient
 {
+    var $id;
+    var $name;
 
-    public static function action_updated()
+    /**
+     * This function returns an ingredients from database "store" by Id given.
+     * @param $id
+     * @return array
+     */
+    public static function load_by_id($id)
     {
-        include APP_PATH . 'view/ingredient_updated.tpl.php';
+
+        $db = model_database::instance();
+        $sql = 'SELECT ingredient_id, ingredient_name
+			FROM ingredients
+			WHERE ingredient_id =  ' . $id;
+        if ($result = $db->get_row($sql)) {
+            $response = new model_ingredient;
+            $response->id = $result['ingredient_id'];
+            $response->name = $result['ingredient_name'];
+            return $response;
+        };
+        return false;
     }
 
-    public function action_edit($params)
+
+    /**
+     * This function returns all objects from database as an sorted array.
+     * @return array
+     */
+    public static function get_all()
     {
-        $ingredient = model_ingredient::load_by_id($params[0]);
-        $form_error = FALSE;
-        if (isset($_POST['form']['action'])) {
-            $ingredient->edit($_POST['form']['name']);
-            header('Location: ' . APP_URL . 'ingredient/updated');
-            $form_error = TRUE;
-        }
-
-        include APP_PATH . 'view/ingredient_edit.tpl.php';
-
+        $db = model_database::instance();
+        $sql = "SELECT * FROM ingredients
+                ORDER BY ingredient_name";
+        $return = array();
+        if ($result = $db->get_rows($sql)) {
+            foreach ($result as $array) {
+                $ingredients = new model_ingredient;
+                $ingredients->name = $array['ingredient_name'];
+                $ingredients->id = $array['ingredient_id'];
+                $return[] = $ingredients;
+            }
+            ksort($return);
+        };
+        return $return;
     }
 
-    public function action_delete($params)
+    /**
+     * This function adds an ingredients with given name.
+     * @param $name
+     */
+    public static function create($name)
     {
-
-        $ingredient = model_ingredient::load_by_id($params[0]);
-
-        //Check if form was submitted.
-        if (isset($_POST['form']['action'])) {
-            $ingredient->delete();
-            header('Location: ' . APP_URL . 'ingredient/deleted');
-        }
-        // Include view for this page.
-        @include_once APP_PATH . 'view/ingredient_delete.tpl.php';
+        $db = model_database::instance();
+        $sql = 'INSERT INTO ingredients
+                (ingredient_name)
+                VALUES
+                (\'' . mysql_real_escape_string($name) . '\');';
+        if ($db->execute($sql)) {
+            $new_id = $db->last_insert_id();
+            return model_ingredient::load_by_id($new_id);
+        };
+        return false;
     }
 
-    public static function  action_deleted($params)
+    /**
+     * This function edits an ingredients with given name.
+     * @param $id
+     * @param $name
+     */
+    public function edit($name)
     {
-        // Include view for this page
-        @include_once APP_PATH . 'view/ingredient_deleted.tpl.php';
+        $db = model_database::instance();
+        $sql = ' UPDATE ingredients
+        SET ingredient_name=\'' . mysql_real_escape_string($name) . '\'
+        WHERE ingredient_id=' . $this->id . ' ;';
+        if ($db->execute($sql)) {
+            $this->name = mysql_real_escape_string($name);
+            return TRUE;
+        };
+        return FALSE;
+    }
+
+    /**
+     * This function is deleting an ingredients by given name.
+     * @param $name
+     */
+    public function delete($name)
+    {
+        $db = model_database::instance();
+        $sql = ' DELETE FROM ingredients WHERE ingredient_name=\'' . mysql_real_escape_string($name) . '\'';
+        if ($db->execute($sql)) {
+            $this->name = null;
+            $this->id = null;
+
+        };
     }
 }
