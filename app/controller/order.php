@@ -32,7 +32,7 @@ class controller_order
     {
         @include_once APP_PATH . "model/order.php";
         $id = $_SESSION['myshop']['account_id'];
-        $orders = model_order::get_by_client_id(8);
+        $orders = model_order::get_by_client_id($id);
         foreach($orders as $order){
             $this->action_view(array($order->id));
         }
