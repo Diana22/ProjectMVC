@@ -42,6 +42,13 @@ class controller_cake
 
     }
 
+    public function action_added()
+    {
+        // Include view for this page
+        @include_once APP_PATH . 'view/cake_added.tpl.php';
+
+    }
+
     public function action_edit($params)
     {
         @include_once APP_PATH . 'model/cake.php';
@@ -55,6 +62,22 @@ class controller_cake
         }
 
         @include APP_PATH . 'view/cake_edit.tpl.php';
+
+    }
+
+    public function action_add($params)
+    {
+        @include_once APP_PATH . 'model/cake.php';
+        $cake = new model_cake;
+
+        if (isset($_POST['form']['action'])) {
+            $cake->create($_POST['form']['name'], $_POST['form']['price'], $_POST['form']['weight'], $_POST['form']['calories'],
+                $_POST['form']['quantity']);
+            header('Location: ' . APP_URL . 'cake/added/');
+            die;
+        }
+
+        @include APP_PATH . 'view/cake_created.tpl.php';
 
     }
 }
