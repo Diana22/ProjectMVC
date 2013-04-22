@@ -167,4 +167,26 @@ class model_order {
         $this->client_id = $order_id_client;
         $this->pickup_date = $order_pickup_date;
     }
+	
+	/*
+	 * Returns an array with all orders.
+	 */
+	public static function get_all()
+    {
+        $db = model_database::instance();
+        $sql = "SELECT * FROM orders
+                ORDER BY order_id";
+        $return = array();
+        if ($result = $db->get_rows($sql)) {
+            foreach ($result as $array) {
+                $orders = new model_order;
+                $orders->id = $array['order_id'];
+                $orders->client_id = $array['order_id_client'];
+                $orders->pickup_date = $array['order_pickup_date'];
+                $return[] = $orders;
+            }
+            ksort($return);
+        };
+        return $return;
+    }
 }
