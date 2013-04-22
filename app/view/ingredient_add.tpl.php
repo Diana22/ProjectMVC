@@ -16,4 +16,5 @@
     <input type="submit" name="form[action]" value="Add"/>
 </form>
 
+
 <?php @include APP_PATH . 'view/snippets/footer.tpl.php'; ?>
