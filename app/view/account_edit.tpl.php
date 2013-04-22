@@ -7,7 +7,7 @@
         </label><br/>
 
         <label>Password.
-            <input type="text" name="form[pass]" value=<?php echo $account->pass; ?>>
+            <input type="text" name="form[pass]" value="">
         </label><br/>
 
         <label>Type.

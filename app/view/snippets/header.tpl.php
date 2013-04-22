@@ -11,5 +11,15 @@
 <body>
 
 <h1>Shop</h1>
+<a href=<?php echo APP_URL?>home/index>Home</a>
+<a href=<?php echo APP_URL?>cart/index>My Cart</a>
+<a href=<?php echo APP_URL?>account/view>My Account</a>
+<?php if ($_SESSION): ?>
+<a href=<?php echo APP_URL?>account/logout>Log Out</a>
+<?php else: ?>
+<a href=<?php echo APP_URL?>account/login>Log In</a>
+<a href="<?php echo APP_URL; ?>account/create/">Create account</a>
+<?php endif; ?>
+
 
 <hr />

@@ -1,6 +1,6 @@
 <?php @include APP_PATH . 'view/snippets/header.tpl.php'; ?>
 
-<h2>Autentificare admin</h2>
+<h2>Autentificare</h2>
 
 <?php if ($form_error) : ?>
 	<p><em>Utilizator sau parola gresita. Reincercati.</em></p>

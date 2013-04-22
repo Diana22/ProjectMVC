@@ -22,7 +22,18 @@
             <input type="text" name="form[phone]" value="" />
         </label>
         <br />
+        <?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
+            Account type:
+            <select name="form[type]">
+                <option value='1'>Admin</option>
+                <option value='0'>Client</option>
+            </select>
+        <?php else: ?>
+            <input type="hidden" name="form[type]" value=0>
+        <?php endif; ?>
+        <br />
         <input type="submit" name="form[action]" value="Create" />
+
     </form>
 
 <?php @include APP_PATH . 'view/snippets/footer.tpl.php';
