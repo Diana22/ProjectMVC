@@ -58,8 +58,7 @@ class controller_cake
 
     }
 
-    public function action_added()
-    {
+    public function action_added() {
         include APP_PATH . 'view/cake_added.tpl.php';
     }
 }
