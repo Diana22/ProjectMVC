@@ -1,6 +1,5 @@
 <?php
-class controller_order
-{
+class controller_order {
 
     public function action_updated()
     {
@@ -23,5 +22,14 @@ class controller_order
         }
         @include APP_PATH . 'view/order_edit.tpl.php';
 
+    }
+
+    public static function action_view($params)
+    {
+        $id = $params[0];
+        $order = model_order::load_by_id($id);
+        $cake = model_cake::load_by_id($id);
+
+        @include_once APP_PATH . 'view/order_view.tpl.php';
     }
 }
