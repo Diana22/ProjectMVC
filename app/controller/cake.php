@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Created by JetBrains PhpStorm.
+ * User: Andrada
+ * Date: 4/17/13
+ * Time: 10:29 AM
+ * To change this template use File | Settings | File Templates.
+ */
 class controller_cake
 {
     public static function  action_list($params)
@@ -52,10 +58,7 @@ class controller_cake
 
     }
 
-    public function action_added()
-    {
-        include APP_PATH . 'view/cake_added.tpl.php';
-    }
+
 
     public function action_add($params)
     {
