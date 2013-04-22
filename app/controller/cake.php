@@ -42,13 +42,6 @@ class controller_cake
 
     }
 
-    public function action_added()
-    {
-        // Include view for this page
-        @include_once APP_PATH . 'view/cake_added.tpl.php';
-
-    }
-
     public function action_edit($params)
     {
         @include_once APP_PATH . 'model/cake.php';
@@ -63,6 +56,11 @@ class controller_cake
 
         @include APP_PATH . 'view/cake_edit.tpl.php';
 
+    }
+
+    public function action_added()
+    {
+        include APP_PATH . 'view/cake_added.tpl.php';
     }
 
     public function action_add($params)
