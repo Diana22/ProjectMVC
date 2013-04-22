@@ -1,5 +1,6 @@
 <?php
-class controller_order {
+class controller_order
+{
 
     public function action_updated()
     {
@@ -13,7 +14,7 @@ class controller_order {
     public function action_edit($params)
     {
         @include_once APP_PATH . '/model/order.php';
-        $order = model_order::get_by_order_id($params[0]);
+        $order = model_order::load_by_id($params[0]);
 
         if (isset($_POST['form']['action'])) {
             $order->update($_POST['form']['id_client'], $_POST['form']['pickup_date']);
@@ -24,7 +25,20 @@ class controller_order {
 
     }
 
-    public static function action_view($params)
+    /*
+     * Displays all orders made by current account
+     */
+    public function action_current()
+    {
+        @include_once APP_PATH . "model/order.php";
+        $id = $_SESSION['myshop']['account_id'];
+        $orders = model_order::get_by_client_id(8);
+        foreach($orders as $order){
+            $this->action_view(array($order->id));
+        }
+    }
+
+    public function action_view($params)
     {
         $id = $params[0];
         $order = model_order::load_by_id($id);
