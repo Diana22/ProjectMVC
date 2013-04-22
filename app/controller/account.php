@@ -68,6 +68,20 @@ class controller_account
 
     }
 
+    public function action_edit($params)
+    {
+        @include_once APP_PATH . '/model/account.php';
+        $account = model_account::load_by_id($params[0]);
+
+        if (isset($_POST['form']['action'])) {
+            $account->update($_POST['form']['username'], $_POST['form']['pass'], $_POST['form']['type']);
+            header('Location: ' . APP_URL . 'account/updated/');
+
+        }
+        @include APP_PATH . 'view/account_edit.tpl.php';
+
+    }
+
 
     public static function action_view($params)
     {
