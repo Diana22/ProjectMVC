@@ -5,10 +5,19 @@
     <p>Ceva e gresit. Reincercati.</p>
 <?php endif ?>
 
-<form action="<?php echo APP_URL . "client/edit/" . $client->id; ?>" method="post">
+<form action="<?php echo APP_URL . "client/edit/" . $client->account_id; ?>" method="post">
     <label>
-        <input type="hidden" name="form[id]" value="<?php $client->id ?>"/>
+        <input type="hidden" name="form[username]" value="<?php $account->username ?>"/>
     </label>
+    <br />
+    <label>
+        <input type="hidden" name="form[type]" value=""/>
+    </label>
+    <br />
+    <label>Parola
+        <input type="text" name="form[pass]" value=""/>
+    </label>
+    <br/>
     <label>Nume
         <input type="text" name="form[name]" value="<?php echo $client->name?>"/>
     </label>
@@ -21,10 +30,6 @@
         <input type="text" name="form[phone]" value="<?php echo $client->phone?>"/>
     </label>
     <br/>
-    <label>Id_cont
-        <input type="text" name="form[account_id]" value="<?php echo $client->account_id?>"/>
-    </label>
-    </br>
     <input type="submit" name="form[action]" value="Update"/>
 </form>
 
