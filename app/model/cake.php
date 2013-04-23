@@ -1,5 +1,6 @@
 <?php
-
+@include_once __DIR__ .'/database.php';
+@include_once __DIR__ .'/ingredient.php';
 class model_cake {
     var $id;
     var $name;
@@ -7,6 +8,7 @@ class model_cake {
     var $weight;
     var $calories;
     var $quantity;
+    var $ordered_quantity;
 
     /**
      * Add a new cake in database
@@ -26,7 +28,7 @@ class model_cake {
         if ($db->execute($sql))  {
             $new_id = $db->last_insert_id();
             return model_cake::load_by_id($new_id);
-        }
+            }
         return FALSE;
     }
 
@@ -65,15 +67,14 @@ class model_cake {
         $sql = 'SELECT *
             FROM cakes';
         if ($result = $db->get_rows($sql)) {
-
             foreach($result as $a){
                 $cake = new model_cake();
                 $cake->id = $a['cake_id'];
                 $cake->name = $a['cake_name'];
                 $cake->price = $a['cake_price'];
                 $cake->weight = $a['cake_weight'];
-                $cake->quantity= $a['cake_quantity'];
                 $cake->calories = $a['cake_calories'];
+                $cake->quantity = $a['cake_quantity'];
                 array_push($res, $cake);
             }
         }
@@ -125,30 +126,47 @@ class model_cake {
             $this->calories = $calories;
             $this->quantity = $quantity;
             return TRUE;
-        }
+            }
         return FALSE;
     }
 
     /**
-     * Get all the ingredients for a cake
-     * @return array
+     * @return array|bool|null
      */
-    public function get_ingredients()
+   /* public function get_ingredients()
     {
-        $res = array();
         $db = model_database::instance();
-        $sql = 'SELECT ing.ingredient_id, ing.ingredient_name FROM ingredients as ing INNER JOIN ingredients_cakes ON
+        $sql = 'SELECT * FROM ingredients as ing INNER JOIN ingredients_cakes ON
         ingredients_cakes.ic_id_ingredient = ing.ingredient_id INNER JOIN cakes ON cakes.cake_id = ingredients_cakes.ic_id_cake
         WHERE cakes.cake_id =' .$this->id;
         if ($result = $db->get_rows($sql)) {
-            $ingredient = new model_ingredient();
+            $res = null;
             foreach($result as $re) {
-                $ingredient->ingredient_id = $re['ingredient_id'];
-                $ingredient->ingredient_name = $re['ingredient_name'];
-                array_push($res, $re);
+                $ingredient = model_ingredient::load_by_id($re['ingredient_id']);
+                $res[] = $ingredient;
+                }
+            return $res;
+            }
+        return FALSE;
+    }*/
+
+    /**
+     * @return array|bool|null
+     */
+    public function get_ingredients()
+    {
+        $db = model_database::instance();
+        $sql = 'SELECT * FROM ingredients_cakes
+        WHERE ic_id_cake =' .$this->id;
+        if ($result = $db->get_rows($sql)) {
+            $res = array();
+            foreach($result as $re) {
+                $ingredient = model_ingredient::load_by_id($re['ic_id_ingredient']);
+                $res[] = $ingredient;
             }
             return $res;
         }
-
+        return FALSE;
     }
+
 }

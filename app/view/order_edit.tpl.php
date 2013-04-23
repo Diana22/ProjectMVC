@@ -3,7 +3,7 @@
     <form action="<?php echo APP_URL; ?>order/edit/<?php echo $order->id; ?>" method="post">
 
         <label>Client ID
-            <input type="text" name="form[id_client]" value=<?php echo $order->id_client; ?>>
+            <input type="text" name="form[id_client]" value=<?php echo $order->client_id; ?>>
         </label><br/>
 
         <label>Pickup Date

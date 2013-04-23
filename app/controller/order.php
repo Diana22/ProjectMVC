@@ -19,7 +19,7 @@ class controller_order
         if (isset($_POST['form']['action'])) {
             $order->update($_POST['form']['id_client'], $_POST['form']['pickup_date']);
             header('Location: ' . APP_URL . 'order/updated/');
-
+            die;
         }
         @include APP_PATH . 'view/order_edit.tpl.php';
 
@@ -32,10 +32,13 @@ class controller_order
     {
         @include_once APP_PATH . "model/order.php";
         $id = $_SESSION['myshop']['account_id'];
-        $orders = model_order::get_by_client_id($id);
-        foreach($orders as $order){
-            $this->action_view(array($order->id));
+        if ($orders = model_order::get_by_client_id($id))
+        {
+            foreach($orders as $order){
+                $this->action_view(array($order->id));
+            }
         }
+        else @include_once APP_PATH . "view/order_empty.tpl.php";
     }
 
     public function action_view($params)
