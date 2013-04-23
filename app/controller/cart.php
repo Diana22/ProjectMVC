@@ -10,14 +10,14 @@
 class controller_cart
 {
 
-    public function action_updated($params)
+    function action_updated($params)
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cart_updated.tpl.php';
 
     }
 
-    public function action_send($params)
+    function action_send($params)
     {
         // Client must be logged in to access this page
         if (!($account = model_account::load_by_id($_SESSION['myshop']['account_id'])) || $account->type != model_account::TYPE_CLIENT) {
@@ -40,7 +40,7 @@ class controller_cart
         die;
     }
 
-    public function action_empty($params)
+    function action_empty($params)
     {
         $cart = model_cart::load();
         if ($cakes = $cart->get_cakes()) {
@@ -52,7 +52,7 @@ class controller_cart
         die;
     }
 
-    public function action_update($params)
+    function action_update($params)
     {
         if (isset($_POST['form']['action'])) {
             $cart = model_cart::load();
@@ -66,7 +66,7 @@ class controller_cart
         die;
     }
 
-    public function action_add($params)
+    function action_add($params)
     {
         if (isset($_POST['form']['action'])) {
             if ($cake = model_cake::load_by_id($_POST['form']['cake_id'])) {
@@ -82,7 +82,7 @@ class controller_cart
         die;
     }
 
-    public function action_index($params)
+    function action_index($params)
     {
         $cart = model_cart::load();
 
@@ -90,19 +90,19 @@ class controller_cart
         @include_once APP_PATH . 'view/cart_index.tpl.php';
     }
 
-    public function action_added($params)
+    function action_added($params)
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cart_added.tpl.php';
     }
 
-    public function  action_emptied($params)
+    function  action_emptied($params)
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cart_emptied.tpl.php';
     }
 
-    public function action_sent($params)
+    function action_sent($params)
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cart_sent.tpl.php';

@@ -2,6 +2,6 @@
 
 <h2>The ingredient was updated</h2>
 
-<p><a href=<?php echo APP_URL ?>"admin/ingredients/">List of ingredients</a></p>
+<p><a href="<?php echo APP_URL ?>admin/ingredients/">List of ingredients</a></p>
 
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php'; ?>

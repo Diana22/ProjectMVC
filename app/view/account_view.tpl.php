@@ -20,6 +20,6 @@
 <?php if ($account->type == "0"): ?>
     <p>Account type: <?php echo "client"; ?> </p>
 <?php endif; ?>
-    <a href=<?php echo APP_URL?>account/edit/<?php echo $account->id?>>Edit Account</a>
+    <a href="<?php echo APP_URL?>account/edit/<?php echo $account->id?>">Edit Account</a>
 
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php';

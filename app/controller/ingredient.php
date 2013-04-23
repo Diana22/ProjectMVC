@@ -2,11 +2,11 @@
 @include_once "../model/ingredient.php";
 class controller_ingredient {
 
-    public static function action_updated() {
+    function action_updated($params) {
         include APP_PATH . 'view/ingredient_updated.tpl.php';
     }
 
-    public function action_edit($params) {
+    function action_edit($params) {
         $e = $params[0];
         $ingredient = model_ingredient::load_by_id($e);
         $form_error = FALSE;
@@ -19,11 +19,11 @@ class controller_ingredient {
 
     }
 
-    public function action_added() {
+    function action_added($params) {
         include APP_PATH . 'view/ingredient_added.tpl.php';
     }
 
-    public function action_add($params) {
+    function action_add($params) {
         $ingredient = new model_ingredient();
         $form_error = FALSE;
         if (isset($_POST['form']['action'])) {

@@ -5,7 +5,7 @@
     <p>Ceva e gresit. Reincercati.</p>
 <?php endif ?>
 
-<form action="<?php echo APP_URL . "ingredient/add/" . $ingredient->id; ?>" method="post">
+<form action="<?php echo APP_URL ?>ingredient/add/<?php echo $ingredient->id; ?>" method="post">
     <label>
         <input type="hidden" name="form[id]" value="<?php $ingredient->id ?>"/>
     </label>

@@ -20,7 +20,7 @@
     <a href=<?php echo APP_URL?>account/login>Log In</a>
     <a href=<?php echo APP_URL ?>account/create/>Create account</a>
 <?php endif; ?>
-<?php if ($_SESSION['myshop']['account_type'] = "admin"): ?>
+<?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
     <a href=<?php echo APP_URL ?>admin>Administration</a>
 <?php endif; ?>
 

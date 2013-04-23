@@ -2,6 +2,7 @@
 
     <h2>Our cakes</h2>
 
+<a href=<?php echo APP_URL ?>cake/add>Add cake</a>
 <?php if ($cakes) : ?>
 
     <ol>

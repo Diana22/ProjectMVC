@@ -12,7 +12,7 @@
         </label>
         <br />
         <label>
-            <input type="hidden" name="form[ingredient][id]" value=<?php echo $ingredient['id'] ?> />
+            <input type="hidden" name="form[ingredient][id]" value="<?php echo $ingredient['id'] ?>" />
         </label>
         <br />
         <input type="submit" name="form[action]" value="Delete Ingredient" />

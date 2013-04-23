@@ -1,6 +1,6 @@
 <?php @include APP_PATH . 'view/snippets/header.tpl.php'; ?>
 
-    <form action=<?php echo APP_URL; ?>cake/edit/<?php echo $cake->id; ?> method="post">
+    <form action="<?php echo APP_URL; ?>cake/edit/<?php echo $cake->id; ?>" method="post">
         <label>Cake name.
             <input type="text" name="form[name]" value=<?php echo $cake->name; ?>>
         </label><br/>

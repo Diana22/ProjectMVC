@@ -15,19 +15,7 @@
 <?php endif; ?>
 
 <?php if ($cake->quantity): ?>
-    <h3>Add to cart</h3>
-    <form action="<?php echo APP_URL; ?>cart/add" method="post">
-        <input type="hidden" name="form[cake_id]" value="<?php echo $cake->id ?>" />
-        <label>Quantity
-            <select name="form[quantity]">
-                <?php for ($i = 1; $i <= $cake->quantity; $i ++) : ?>
-                    <option value="<?php echo $i ?>"><?php echo $i ?></option>
-                <?php endfor ?>
-            </select>
-        </label>
-        <br />
-        <input type="submit" name="form[action]" value="Add" />
-    </form>
+    <p>Quantity: <?php echo $cake->quantity; ?> </p>
 
 <?php endif; ?>
 
@@ -42,9 +30,9 @@
     </ol>
 <?php endif; ?>
 
-<?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
-    <a href=<?php echo APP_URL . "cake/edit/$cake->id" ?> >Edit</a>
-    <a href=<?php echo APP_URL . "cake/delete/$cake->id" ?> >Delete</a>
+<?php if (isset($_SESSION) && $_SESSION['myshop']['account_type'] == "admin"): ?>
+    <a href="<?php echo APP_URL . "cake/edit/$cake->id" ?>" >Edit</a>
+    <a href="<?php echo APP_URL . "cake/delete/$cake->id" ?>" >Delete</a>
 <?php endif; ?>
 
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php';

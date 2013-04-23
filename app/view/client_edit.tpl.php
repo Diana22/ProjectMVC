@@ -5,7 +5,7 @@
     <p>Ceva e gresit. Reincercati.</p>
 <?php endif ?>
 
-<form action="<?php echo APP_URL . "client/edit/" . $client->account_id; ?>" method="post">
+<form action="<?php echo APP_URL ?>client/edit/<?php echo $client->account_id; ?>" method="post">
     <label>
         <input type="hidden" name="form[username]" value="<?php $account->username ?>"/>
     </label>

@@ -2,7 +2,7 @@
 class controller_order
 {
 
-    public function action_updated()
+    public function action_updated($params)
     {
         include APP_PATH . 'view/order_updated.tpl.php';
     }
@@ -28,7 +28,7 @@ class controller_order
     /*
      * Displays all orders made by current account
      */
-    public function action_current()
+    public function action_current($params)
     {
         @include_once APP_PATH . "model/order.php";
         $id = $_SESSION['myshop']['account_id'];

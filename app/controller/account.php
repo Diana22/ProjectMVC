@@ -35,7 +35,7 @@ class controller_account
         include_once APP_PATH . 'view/account_login.tpl.php';
     }
 
-    function action_created(){
+    function action_created($params){
         // Include view for this page.
         include_once APP_PATH . 'view/account_created.tpl.php';
     }
@@ -43,7 +43,7 @@ class controller_account
     /**
      * Logout action.
      */
-    function action_logout() {
+    function action_logout($params) {
         // Unset session variable.
         session_destroy();
 
@@ -52,23 +52,23 @@ class controller_account
         die;
     }
 
-    function action_create(){
+    function action_create($params){
         if (isset($_POST['form'])){
-            $account = model_account::create($_POST['form']['user'], $_POST['form']['password'], 0);
+            $account = model_account::create($_POST['form']['user'], $_POST['form']['password'], $_POST['form']['type']);
             model_client::create($account->id, $_POST['form']['name'], $_POST['form']['address'], $_POST['form']['phone']);
-            header('Location:' . APP_URL . 'account/login');
+            header('Location:' . APP_URL . 'account/created');
             die;
         }
         @include_once APP_PATH . 'view/account_create.tpl.php';
     }
 
-    public function action_updated() {
+    function action_updated($params) {
         // Include view for this page
         @include_once APP_PATH . 'view/account_updated.tpl.php';
 
     }
 
-    public function action_edit($params)
+    function action_edit($params)
     {
         @include_once APP_PATH . '/model/account.php';
         $account = model_account::load_by_id($params[0]);
@@ -82,8 +82,7 @@ class controller_account
 
     }
 
-
-    public static function action_view($params)
+    function action_view($params)
     {
         $id = $_SESSION['myshop']['account_id'];
         $account = model_account::load_by_id($id);

@@ -22,12 +22,14 @@
             <input type="text" name="form[phone]" value="" />
         </label>
         <br />
-        <?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
-            Account type:
-            <select name="form[type]">
-                <option value='1'>Admin</option>
-                <option value='0'>Client</option>
-            </select>
+        <?php if (isset($_SESSION) && $_SESSION['myshop']['account_type'] == "admin"): ?>
+            <label>
+                Account type:
+                <select name="form[type]">
+                    <option value='1'>Admin</option>
+                    <option value='0'>Client</option>
+                </select>
+            </label>
         <?php else: ?>
             <input type="hidden" name="form[type]" value=0>
         <?php endif; ?>

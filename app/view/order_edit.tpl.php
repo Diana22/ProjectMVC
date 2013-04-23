@@ -1,6 +1,6 @@
 <?php @include APP_PATH . 'view/snippets/header.tpl.php'; ?>
 
-    <form action=<?php echo APP_URL; ?>order/edit/<?php echo $order->id; ?> method="post">
+    <form action="<?php echo APP_URL; ?>order/edit/<?php echo $order->id; ?>" method="post">
 
         <label>Client ID
             <input type="text" name="form[id_client]" value=<?php echo $order->id_client; ?>>

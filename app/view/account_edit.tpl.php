@@ -10,7 +10,7 @@
             <input type="text" name="form[pass]" value="">
         </label><br />
 
-        <?php if ($account->type == "admin"): ?>
+        <?php if (isset($_SESSION) && $_SESSION['myshop']['account_type'] == "admin"): ?>
         <label>Account type:
             <select name="form[type]">
                 <option value='1'>Admin</option>
