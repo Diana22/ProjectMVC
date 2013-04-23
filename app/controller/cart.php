@@ -32,6 +32,7 @@ class controller_cart
                 foreach ($cakes as $cake) {
                     if ($order->add_cake($cake->id, $cake->order_quantity)) {
                         $cart->remove_cake($cake->id);
+                        $cake->sell_cakes($cake->order_quantity);
                     }
                 }
             }
