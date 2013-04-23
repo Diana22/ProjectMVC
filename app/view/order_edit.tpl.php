@@ -2,14 +2,21 @@
 
     <form action="<?php echo APP_URL; ?>order/edit/<?php echo $order->id; ?>" method="post">
 
-        <label>Client ID
-            <input type="text" name="form[id_client]" value=<?php echo $order->client_id; ?>>
-        </label><br/>
-
         <label>Pickup Date
             <input type="text" name="form[pickup_date]" value=<?php echo $order->pickup_date; ?>>
         </label><br/>
-
+        <?php if ($cakes = $order->get_cakes()): ?>
+            <ol>
+                <b>Cakes: </b>
+                <?php foreach ($cakes as $key => $cake): ?>
+                    <li>
+                        <?php echo $cake->name ?>
+                        <a href="<?=APP_URL?>order/remove/<?=$order->id . "/" . $cake->id?>">Remove ingredient</a>
+                        <br />
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        <?php endif; ?>
         <input type="hidden" name="form[id]" value=<?php echo $order->id; ?>>
         <input type="submit" name="form[action]" value="Update">
     </form>
