@@ -76,6 +76,7 @@ class controller_account
         if (isset($_POST['form']['action'])) {
             $account->update($_POST['form']['username'], $_POST['form']['pass'], $_POST['form']['type']);
             header('Location: ' . APP_URL . 'account/updated/');
+            die;
 
         }
         @include APP_PATH . 'view/account_edit.tpl.php';
