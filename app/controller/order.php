@@ -46,4 +46,11 @@ class controller_order
 
         @include_once APP_PATH . 'view/order_view.tpl.php';
     }
+
+    public function action_delete($params){
+        $order = model_order::load_by_id($params[0]);
+        $order->delete();
+
+        @include_once APP_PATH . "view/order_deleted.tpl.php";
+    }
 }

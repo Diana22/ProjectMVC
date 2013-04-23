@@ -1,6 +1,6 @@
 <?php @include APP_PATH . '/view/snippets/header.tpl.php'; ?>
 
-<h2> <?php echo $cake->name;?></h2>
+    <h2> <?php echo $cake->name;?></h2>
 
 <?php if ($cake->price): ?>
     <p>Price: <?php echo $cake->price; ?> </p>
@@ -40,6 +40,11 @@
             </li>
         <?php endforeach; ?>
     </ol>
+<?php endif; ?>
+
+<?php if ($_SESSION['myshop']['account_type'] == "admin"): ?>
+    <a href=<?php echo APP_URL . "cake/edit/$cake->id" ?> >Edit</a>
+    <a href=<?php echo APP_URL . "cake/delete/$cake->id" ?> >Delete</a>
 <?php endif; ?>
 
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php';
