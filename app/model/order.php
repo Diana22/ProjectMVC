@@ -4,11 +4,10 @@ include_once __DIR__ . "/cake.php";
 include_once __DIR__ . "/client.php";
 class model_order {
 
-    const type_cancel = -1;
-    const type_pending = 0;
-    const type_process = 1;
+    const STATUS_NEW = -1;
+    const STATUS_PROCESSED = 0;
+    const STATUS_CANCELLED = 1;
 
-    var $status;
     var $id;
     var $client_id;
     var $pickup_date;
@@ -26,7 +25,7 @@ class model_order {
 			    LIMIT 1;';
         if ($result = $db->get_row($sql)) {
             $return = new model_order();
-            $return->set_properties($result['order_id'],$result['order_id_client'],$result['order_pickup_date'],$result['order_status']);
+            $return->set_properties($result['order_id'],$result['order_id_client'],$result['order_pickup_date']);
             return $return;
         }
         return false;
@@ -47,7 +46,7 @@ class model_order {
             foreach ($result as $array)
             {
                 $model = new model_order();
-                $model->set_properties($array['order_id'],$array['order_id_client'],$array['order_pickup_date'],$array['order_status']);
+                $model->set_properties($array['order_id'],$array['order_id_client'],$array['order_pickup_date']);
                 $return[] = $model;
             }
             return $return;
@@ -60,16 +59,15 @@ class model_order {
      * @param $id client id.
      * @param $pickup date in format yyyy.mm.yy.
      */
-    public static function create($client_id, $date, $status){
+    public static function create($client_id, $date){
         $db = model_database::instance();
         $sql = 'INSERT INTO orders
-                    (order_id_client, order_pickup_date, order_status)
+                    (order_id_client, order_pickup_date)
                 VALUES
-                    (' . $client_id . ',\'' . $date . ',\'' . $status . ',\');';
+                    (' . $client_id . ',\'' . $date . '\');';
         if ($db->execute($sql))
         {
-            $new_status = $db->last_insert_id();
-            return model_order::load_by_id($new_status);
+            return model_order::load_by_id($db->last_insert_id());
         }
         return false;
     }
@@ -92,22 +90,20 @@ class model_order {
         $this->id = null;
         $this->client_id = null;
         $this->pickup_date = null;
-        $this->status = null;
         return true;
     }
 
     /*
      * Updates the current record with new values.
      */
-    public function update($client_id, $pickup_date, $status) {
+    public function update($client_id, $pickup_date) {
         $db = model_database::instance();
         $sql = 'UPDATE orders
-                SET order_id_client=' . $client_id . ', order_pickup_date=\'' . $pickup_date . '\', order_status=\'' . $status . '\'
+                SET order_id_client=' . $client_id . ', order_pickup_date=\'' . $pickup_date . '\'
                 WHERE order_id=' . $this->id;
         if($db->execute($sql)){
             $this->client_id = $client_id;
             $this->pickup_date = $pickup_date;
-            $this->status = $status;
             return true;
         }
         return false;
@@ -169,16 +165,12 @@ class model_order {
     /*
      * Sets the object attributes to those of an array with same keys.
      */
-    public function set_properties($order_id,$order_id_client,$order_pickup_date, $status){
+    public function set_properties($order_id,$order_id_client,$order_pickup_date){
         $this->id = $order_id;
         $this->client_id = $order_id_client;
         $this->pickup_date = $order_pickup_date;
-        $this->status = $status;
     }
 
-    /*
-     * Returns an array with all orders.
-     */
     public static function get_all()
     {
         $db = model_database::instance();
@@ -191,7 +183,6 @@ class model_order {
                 $orders->id = $array['order_id'];
                 $orders->client_id = $array['order_id_client'];
                 $orders->pickup_date = substr($array['order_pickup_date'],0,10);
-                $orders->status = $array['status'];
                 $return[] = $orders;
             }
             ksort($return);
@@ -200,11 +191,4 @@ class model_order {
         return $return;
     }
 
-    public function set_status($status){
-        $this->status = $status;
-    }
-
-    public function get_status($staus){
-        return $this->status;
-    }
 }
