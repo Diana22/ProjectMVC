@@ -168,5 +168,23 @@ class model_cake {
         }
         return FALSE;
     }
+	
+	public static function search_by_ingredient($name)
+    {
+        $db = model_database::instance();
+        $sql = 'SELECT cake_id FROM cakes INNER JOIN ingredients_cakes ON ingredients_cakes.ic_id_cake = cakes.cake_id
+               INNER JOIN ingredients on ingredients.ingredient_id = ingredients_cakes.ic_id_ingredient
+               WHERE ingredients.ingredient_name =\'' . $name . '\'';
+        if ($result = $db->get_rows($sql)) {
+            $res = array();
+            foreach ($result as $re) {
+                $cake = model_cake::load_by_id($re['cake_id']);
+                $res[] = $cake;
+            }
+            return $res;
+        }
+        return FALSE;
+
+    }
 
 }
