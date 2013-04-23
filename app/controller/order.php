@@ -30,13 +30,14 @@ class controller_order
      */
     public function action_current($params)
     {
-        @include_once APP_PATH . "model/order.php";
         $id = $_SESSION['myshop']['account_id'];
         if ($orders = model_order::get_by_client_id($id))
         {
+            @include_once APP_PATH . "view/snippets/header.tpl.php";
             foreach($orders as $order){
-                $this->action_view(array($order->id));
+                @include APP_PATH . "view/order_current.tpl.php";
             }
+            @include_once APP_PATH . "view/snippets/footer.tpl.php";
         }
         else @include_once APP_PATH . "view/order_empty.tpl.php";
     }

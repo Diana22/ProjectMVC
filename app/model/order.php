@@ -4,6 +4,9 @@ include_once __DIR__ . "/cake.php";
 include_once __DIR__ . "/client.php";
 class model_order
 {
+    const STATUS_NEW = -1;
+    const STATUS_PROCESSED = 0;
+    const STATUS_CANCELLED = 1;
 
     var $id;
     var $client_id;
@@ -104,7 +107,7 @@ class model_order
                 WHERE order_id=' . $this->id;
         if ($db->execute($sql)) {
             $this->client_id = $client_id;
-            $this->pickup_date = $pickup_date;
+            $this->pickup_date = substr($pickup_date,0,10);
             return true;
         }
         return false;
@@ -174,7 +177,7 @@ class model_order
     {
         $this->id = $order_id;
         $this->client_id = $order_id_client;
-        $this->pickup_date = $order_pickup_date;
+        $this->pickup_date = substr($order_pickup_date,0,10);
     }
 
     /*
@@ -191,7 +194,7 @@ class model_order
                 $orders = new model_order;
                 $orders->id = $array['order_id'];
                 $orders->client_id = $array['order_id_client'];
-                $orders->pickup_date = $array['order_pickup_date'];
+                $orders->pickup_date = substr($array['order_pickup_date'],0,10);
                 $return[] = $orders;
             }
             ksort($return);

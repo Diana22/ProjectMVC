@@ -7,7 +7,7 @@
 
 <form action="<?php echo APP_URL ?>client/edit/<?php echo $client->account_id; ?>" method="post">
     <label>Parola
-        <input type="text" name="form[pass]" value=""/>
+        <input type="password" name="form[pass]" value=""/>
     </label>
     <br/>
     <label>Nume

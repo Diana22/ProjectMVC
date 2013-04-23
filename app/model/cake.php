@@ -187,4 +187,17 @@ class model_cake {
 
     }
 
+    public function sell_cakes($quantity){
+        $buff = $this->quantity - $quantity;
+        $db = model_database::instance();
+        $sql = 'UPDATE cakes
+            SET cake_quantity=\'' . $buff .'\'
+            WHERE cake_id = \''. $this->id . '\'';
+        if ($db->execute($sql)) {
+            $this->quantity = $buff;
+            return TRUE;
+        }
+        return FALSE;
+    }
+
 }

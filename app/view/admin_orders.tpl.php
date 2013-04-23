@@ -4,9 +4,10 @@
 
 <?php  if ($orders) : ?>
     <?php foreach ($orders as $order) : ?>
-        <b><?php echo $order->id; ?></b>
+        <b><?php echo "Order id: " . $order->id; ?></b>
+        Due: <?php echo $order->pickup_date?>
         <?php if ($cakes = $order->get_cakes()): ?>
-            <h3>Ingredients</h3>
+            <h3>Cakes:</h3>
             <ol>
                 <?php foreach ($cakes as $key => $ingredient) : ?>
                     <li>
