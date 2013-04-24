@@ -28,14 +28,8 @@ class controller_admin {
         else @include_once APP_PATH . 'view/404_admin.tpl.php';
 	}
 
-<<<<<<< HEAD
-    /**
-     * Returns list of orders.
-     * @param $params
-=======
     /*
      * Lists orders.
->>>>>>> ea549068ba6bf6aa21ff865f29e1c77cf3aaa118
      */
     function action_orders($params)
     {
@@ -47,11 +41,7 @@ class controller_admin {
     }
 
     /*
-<<<<<<< HEAD
-     * Returns list of all cakes.
-=======
      * Lists all cakes.
->>>>>>> ea549068ba6bf6aa21ff865f29e1c77cf3aaa118
      */
     function action_cakes($params){
         if (model_validate::validation()){
@@ -62,13 +52,8 @@ class controller_admin {
         else @include_once APP_PATH . 'view/404_admin.tpl.php';
     }
 
-<<<<<<< HEAD
-    /**
-     * Returns a cake loaded by ID.
-     * @param $params
-=======
     /*
->>>>>>> ea549068ba6bf6aa21ff865f29e1c77cf3aaa118
+     * Lists details of a cake.
      */
     function action_cake($params){
         if (model_validate::validation()){

@@ -9,7 +9,7 @@
 
 class model_validate {
     /*
-     * Returns true if there is and admin logged in.
+     * @Return true: admin is logged in, false otherwise.
      */
     public static function validation(){
         if (isset($_SESSION) && $_SESSION['myshop']['account_type'] == "admin"){
