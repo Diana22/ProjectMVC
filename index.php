@@ -36,8 +36,14 @@ $action = $config['default_action'];
 
 // First argument in the URL, if exists, defines the controller
 if (count($tokens) >= 1) {
+    if (model_validate::validation()){
+        $controller = '404';
+        $action = 'admin';
+    }
+    else{
 	$controller = $tokens[0];
 	$tokens = (count($tokens) > 1) ? array_slice($tokens, 1) : array();
+    }
 }
 
 // Second argument in the URL, if exists, defines the action
