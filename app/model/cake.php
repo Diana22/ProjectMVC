@@ -1,14 +1,8 @@
 <?php
-<<<<<<< HEAD
 include_once __DIR__ . '/database.php';
 include_once __DIR__ . '/ingredient.php';
 class model_cake
 {
-=======
-@include_once __DIR__ .'/database.php';
-@include_once __DIR__ .'/ingredient.php';
-class model_cake {
->>>>>>> 01d1e06b5c59d19be414f3cd33b1f5260e113716
     var $id;
     var $name;
     var $price;
@@ -16,10 +10,7 @@ class model_cake {
     var $calories;
     var $quantity;
     var $ordered_quantity;
-<<<<<<< HEAD
 
-=======
->>>>>>> 01d1e06b5c59d19be414f3cd33b1f5260e113716
 
     /**
      * Add a new cake in database
@@ -39,7 +30,7 @@ class model_cake {
         if ($db->execute($sql)) {
             $new_id = $db->last_insert_id();
             return model_cake::load_by_id($new_id);
-            }
+        }
         return FALSE;
     }
 
@@ -78,11 +69,7 @@ class model_cake {
         $sql = 'SELECT *
             FROM cakes';
         if ($result = $db->get_rows($sql)) {
-<<<<<<< HEAD
             foreach ($result as $a) {
-=======
-            foreach($result as $a){
->>>>>>> 01d1e06b5c59d19be414f3cd33b1f5260e113716
                 $cake = new model_cake();
                 $cake->id = $a['cake_id'];
                 $cake->name = $a['cake_name'];
@@ -141,36 +128,9 @@ class model_cake {
             $this->calories = $calories;
             $this->quantity = $quantity;
             return TRUE;
-            }
+        }
         return FALSE;
     }
-
-    /**
-     * @return array|bool|null
-     */
-   /* public function get_ingredients()
-    {
-        $db = model_database::instance();
-<<<<<<< HEAD
-        $sql = 'SELECT * FROM ingredients_cakes
-        WHERE ic_id_cake =' . $this->id;
-        if ($result = $db->get_rows($sql)) {
-            $res = array();
-            foreach ($result as $re) {
-=======
-        $sql = 'SELECT * FROM ingredients as ing INNER JOIN ingredients_cakes ON
-        ingredients_cakes.ic_id_ingredient = ing.ingredient_id INNER JOIN cakes ON cakes.cake_id = ingredients_cakes.ic_id_cake
-        WHERE cakes.cake_id =' .$this->id;
-        if ($result = $db->get_rows($sql)) {
-            $res = null;
-            foreach($result as $re) {
-                $ingredient = model_ingredient::load_by_id($re['ingredient_id']);
-                $res[] = $ingredient;
-                }
-            return $res;
-            }
-        return FALSE;
-    }*/
 
     /**
      * @return array|bool|null
@@ -179,11 +139,10 @@ class model_cake {
     {
         $db = model_database::instance();
         $sql = 'SELECT * FROM ingredients_cakes
-        WHERE ic_id_cake =' .$this->id;
+        WHERE ic_id_cake =' . $this->id;
         if ($result = $db->get_rows($sql)) {
             $res = array();
-            foreach($result as $re) {
->>>>>>> 01d1e06b5c59d19be414f3cd33b1f5260e113716
+            foreach ($result as $re) {
                 $ingredient = model_ingredient::load_by_id($re['ic_id_ingredient']);
                 $res[] = $ingredient;
             }
@@ -191,7 +150,6 @@ class model_cake {
         }
         return FALSE;
     }
-<<<<<<< HEAD
 
     /**
      * Adds the ingredient checked into database.
@@ -208,24 +166,6 @@ class model_cake {
         }
         return FALSE;
     }
-=======
-	
-	public static function search_by_ingredient($name)
-    {
-        $db = model_database::instance();
-        $sql = 'SELECT cake_id FROM cakes INNER JOIN ingredients_cakes ON ingredients_cakes.ic_id_cake = cakes.cake_id
-               INNER JOIN ingredients on ingredients.ingredient_id = ingredients_cakes.ic_id_ingredient
-               WHERE ingredients.ingredient_name =\'' . $name . '\'';
-        if ($result = $db->get_rows($sql)) {
-            $res = array();
-            foreach ($result as $re) {
-                $cake = model_cake::load_by_id($re['cake_id']);
-                $res[] = $cake;
-            }
-            return $res;
-        }
-        return FALSE;
->>>>>>> 01d1e06b5c59d19be414f3cd33b1f5260e113716
 
     /**
      * Deletes the ingredient unchecked from database.
@@ -242,21 +182,4 @@ class model_cake {
         return FALSE;
     }
 
-<<<<<<< HEAD
 }
-=======
-    public function sell_cakes($quantity){
-        $buff = $this->quantity - $quantity;
-        $db = model_database::instance();
-        $sql = 'UPDATE cakes
-            SET cake_quantity=\'' . $buff .'\'
-            WHERE cake_id = \''. $this->id . '\'';
-        if ($db->execute($sql)) {
-            $this->quantity = $buff;
-            return TRUE;
-        }
-        return FALSE;
-    }
-
-}
->>>>>>> 01d1e06b5c59d19be414f3cd33b1f5260e113716
