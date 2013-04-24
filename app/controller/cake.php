@@ -1,9 +1,17 @@
 <?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: Andrada
+ * Date: 4/17/13
+ * Time: 10:29 AM
+ * To change this template use File | Settings | File Templates.
+ */
 class controller_cake
 {
-    function action_list($params)
+    public static function  action_list($params)
     {
         $cakes = model_cake::get_all();
+
         // Include view for this page
         @include_once APP_PATH . 'view/cake_list.tpl.php';
     }
@@ -11,72 +19,89 @@ class controller_cake
     /*
      * View a specific cake.
      */
-    function action_view($params)
+    public static function action_view($params)
     {
-        @include_once APP_PATH . 'model/cake.php';
+
         $cake = model_cake::load_by_id($params[0]);
+
         @include_once APP_PATH . 'view/cake_view.tpl.php';
     }
 
-    function action_deleted($params)
+
+    public function action_deleted()
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cake_deleted.tpl.php';
 
     }
 
-    function action_updated($params)
+    public function action_updated()
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cake_updated.tpl.php';
 
     }
 
-    function action_edit($params)
+    public function action_edit($params)
     {
         @include_once APP_PATH . 'model/cake.php';
         $cake = model_cake::load_by_id($params[0]);
+        $ingredients2 = $cake->get_ingredients();
 
-        $form_error = FALSE;
         if (isset($_POST['form']['action'])) {
             $cake->update($_POST['form']['name'], $_POST['form']['price'], $_POST['form']['weight'], $_POST['form']['calories'],
                 $_POST['form']['quantity']);
-            header('Location: ' . APP_URL . 'cake/updated');
+            $ingredients1 = $_POST['form']['ingredient_id'];
+
+            //Check if there is any new ingredient checked.
+            foreach ($ingredients1 as $ingred) {
+                $bool = false;
+                foreach ($ingredients2 as $ingredient) {
+                    if ($ingred == $ingredient->id) {
+                        $bool = true;
+                    }
+                }
+                if (!$bool) {
+
+                    $cake->add_ingredient($ingred);
+                }
+            }
+
+            //Check if there is any ingredient was unchecked.
+            foreach ($ingredients2 as $ingredient) {
+                $bool = false;
+                foreach ($ingredients1 as $ingred) {
+                    if ($ingred === $ingredient->id) {
+                        $bool = true;
+                    }
+                }
+                if (!$bool) {
+                    $cake->delete_ingredient($ingredient->id);
+                }
+            }
+
+            header('Location: ' . APP_URL . 'cake/updated/');
             die;
         }
-        $form_error = TRUE;
 
         @include APP_PATH . 'view/cake_edit.tpl.php';
 
     }
 
-    /*
-     * Delete a specific cake by id.
-     */
-    function action_delete($params)
-    {
-        $cake = model_cake::load_by_id($params[0]);
-        if ($cake->delete()){
-            header('Location:' . APP_URL . 'cake/deleted');
-        }
-    }
 
-    /*
-     * Add a cake.
-     */
-    function action_add($params){
-        if (isset($_POST['form'])){
-            model_cake::create($_POST['form']['name'], $_POST['form']['price'], $_POST['form']['weight'], $_POST['form']['calories'], $_POST['form']['quantity']);
-            header('Location:' . APP_URL . 'cake/added');
+    public function action_add($params)
+    {
+        @include_once APP_PATH . 'model/cake.php';
+        $cake = new model_cake;
+
+        if (isset($_POST['form']['action'])) {
+            $cake->create($_POST['form']['name'], $_POST['form']['price'], $_POST['form']['weight'], $_POST['form']['calories'],
+                $_POST['form']['quantity']);
+            header('Location: ' . APP_URL . 'cake/added/');
             die;
         }
-        @include_once APP_PATH . "view/cake_add.tpl.php";
-    }
 
-    /*
-     * Confirms the addition of a cake.
-     */
-    function action_added($params){
-        @include_once APP_PATH . "view/cake_added.tpl.php";
+        @include APP_PATH . 'view/cake_created.tpl.php';
+
     }
 }
