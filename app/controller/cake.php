@@ -104,4 +104,16 @@ class controller_cake
         @include APP_PATH . 'view/cake_created.tpl.php';
 
     }
+	
+	public function action_search() {
+        $cakes = array();
+        if(isset($_POST['form']['action'])) {
+            $name = $_POST['form']['name'];
+            $cakes = model_cake::search_by_ingredient($name);
+            @include_once APP_PATH . 'view/cake_list.tpl.php';
+            die;
+        }
+        @include APP_PATH .'view/cake_search.tpl.php';
+
+    }
 }

@@ -6,16 +6,8 @@
 <?php endif ?>
 
 <form action="<?php echo APP_URL ?>client/edit/<?php echo $client->account_id; ?>" method="post">
-    <label>
-        <input type="hidden" name="form[username]" value="<?php $account->username ?>"/>
-    </label>
-    <br />
-    <label>
-        <input type="hidden" name="form[type]" value=""/>
-    </label>
-    <br />
     <label>Parola
-        <input type="text" name="form[pass]" value=""/>
+        <input type="password" name="form[pass]" value=""/>
     </label>
     <br/>
     <label>Nume
@@ -31,6 +23,13 @@
     </label>
     <br/>
     <input type="submit" name="form[action]" value="Update"/>
+    <label>
+        <input type="hidden" name="form[username]" value="<?php $account->username ?>"/>
+    </label>
+    <br />
+    <label>
+        <input type="hidden" name="form[type]" value=""/>
+    </label>
 </form>
 
 <?php @include APP_PATH . 'view/snippets/footer.tpl.php'; ?>

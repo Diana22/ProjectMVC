@@ -4,13 +4,26 @@
 
 <?php  if ($orders) : ?>
     <?php foreach ($orders as $order) : ?>
-
-        <p><b><?php echo $order->id; ?></b>
+        <b><?php echo "Order id: " . $order->id; ?></b>
+        Due: <?php echo $order->pickup_date?>
+        <?php if ($cakes = $order->get_cakes()): ?>
+            <h3>Cakes:</h3>
+            <ol>
+                <?php foreach ($cakes as $key => $ingredient) : ?>
+                    <li>
+                        <?php echo $ingredient->name; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        <?php endif; ?>
+        <p>
             <a href="<?php echo APP_URL ?>order/edit/<?php echo $order->id ?>">  Edit order</a>
             <a href="<?php echo APP_URL ?>order/delete/<?php echo $order->id ?>"> Delete order</a>
         </p>
 
     <?php endforeach; ?>
+
+
 
 <?php else : ?>
 

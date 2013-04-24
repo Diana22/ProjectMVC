@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
+include_once __DIR__ . "/database.php";
 class model_ingredient
 {
     var $id;

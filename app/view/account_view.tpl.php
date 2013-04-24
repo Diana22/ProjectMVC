@@ -16,10 +16,11 @@
 
 <?php if ($account->type == "1"): ?>
     <p>Account type: <?php echo "admin"; ?> </p>
-    <?php endif; ?>
+<?php endif; ?>
 <?php if ($account->type == "0"): ?>
     <p>Account type: <?php echo "client"; ?> </p>
 <?php endif; ?>
-    <a href="<?php echo APP_URL?>account/edit/<?php echo $account->id?>">Edit Account</a>
+    <p><a href="<?php echo APP_URL ?>order/current">Review all orders made</a></p>
+    <a href="<?php echo APP_URL ?>client/edit/<?php echo $account->id ?>">Edit client</a>
 
 <?php @include APP_PATH . '/view/snippets/footer.tpl.php';
