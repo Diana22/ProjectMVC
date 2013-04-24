@@ -9,6 +9,11 @@ class model_client {
     var $phone;
     var $account_id;
 
+    /**
+     * Load a client by client id from database
+     * @param $client_id
+     * @return bool|model_client
+     */
     public static function load_by_id($client_id){
         $db = model_database::instance();
         $sql = 'SELECT *
@@ -27,6 +32,11 @@ class model_client {
         return false;
     }
 
+    /**
+     * Load a client by id account from database
+     * @param $id_account
+     * @return bool|model_client
+     */
     public static function load_by_account_id($id_account){
         $db = model_database::instance();
         $sql = 'SELECT *
@@ -45,6 +55,14 @@ class model_client {
         return false;
     }
 
+    /**
+     * Add a new client in database
+     * @param $account_id
+     * @param $name
+     * @param $address
+     * @param $phone
+     * @return bool|model_client
+     */
     public static function create($account_id, $name, $address, $phone){
         $db = model_database::instance();
         $sql = 'INSERT INTO clients
@@ -58,6 +76,14 @@ class model_client {
         return false;
     }
 
+    /**
+     * Update a client in database
+     * @param $account_id
+     * @param $name
+     * @param $address
+     * @param $phone
+     * @return bool
+     */
     public function update($name, $address, $phone, $account_id)
     {
         $db = model_database::instance();
@@ -75,6 +101,10 @@ class model_client {
         return false;
     }
 
+    /**
+     * Delete a client from database
+     * @return bool
+     */
     public function delete(){
         $db = model_database::instance();
         $sql = 'DELETE FROM clients
@@ -90,12 +120,18 @@ class model_client {
     return false;
     }
 
+    /**
+     * @return model_account
+     */
     public function get_account(){
 
         return model_account::load_by_id($this->account_id);
 
     }
 
+    /**
+     * @return model_order
+     */
     public function get_orders(){
 
         return model_order::get_by_client_id($this->id);
