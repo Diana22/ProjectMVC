@@ -35,7 +35,10 @@ class controller_account
         include_once APP_PATH . 'view/account_login.tpl.php';
     }
 
-    function action_created($params){
+    /**
+     * Redirects to the file that creates the creation page.
+     */
+    function action_created(){
         // Include view for this page.
         include_once APP_PATH . 'view/account_created.tpl.php';
     }
@@ -43,7 +46,7 @@ class controller_account
     /**
      * Logout action.
      */
-    function action_logout($params) {
+    function action_logout() {
         // Unset session variable.
         session_destroy();
 
@@ -52,23 +55,32 @@ class controller_account
         die;
     }
 
-    function action_create($params){
+    /**
+     * Create an account.
+     */
+    function action_create(){
         if (isset($_POST['form'])){
-            $account = model_account::create($_POST['form']['user'], $_POST['form']['password'], $_POST['form']['type']);
+            $account = model_account::create($_POST['form']['user'], $_POST['form']['password'], 0);
             model_client::create($account->id, $_POST['form']['name'], $_POST['form']['address'], $_POST['form']['phone']);
-            header('Location:' . APP_URL . 'account/created');
+            header('Location:' . APP_URL . 'account/login');
             die;
         }
         @include_once APP_PATH . 'view/account_create.tpl.php';
     }
 
-    function action_updated($params) {
+    /**
+     * Update an account.
+     */
+    public function action_updated() {
         // Include view for this page
         @include_once APP_PATH . 'view/account_updated.tpl.php';
 
     }
 
-    function action_edit($params)
+    /**
+     * Edit an account.
+     */
+    public function action_edit($params)
     {
         @include_once APP_PATH . '/model/account.php';
         $account = model_account::load_by_id($params[0]);
@@ -76,18 +88,20 @@ class controller_account
         if (isset($_POST['form']['action'])) {
             $account->update($_POST['form']['username'], $_POST['form']['pass'], $_POST['form']['type']);
             header('Location: ' . APP_URL . 'account/updated/');
-            die;
 
         }
         @include APP_PATH . 'view/account_edit.tpl.php';
 
     }
 
-    function action_view($params)
+    /**
+     * View a specific account.
+     */
+    public static function action_view($params)
     {
         $id = $_SESSION['myshop']['account_id'];
         $account = model_account::load_by_id($id);
-        $client = model_client::load_by_account_id($id);
+        $client = model_client::load_by_id($id);
 
         @include_once APP_PATH . 'view/account_view.tpl.php';
     }
