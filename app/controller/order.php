@@ -2,6 +2,10 @@
 class controller_order
 {
 
+    /**
+     * Redirects us to the file that creates the updated order confirmation page.
+     * @param $params
+     */
     public function action_updated($params)
     {
         include APP_PATH . 'view/order_updated.tpl.php';
@@ -26,22 +30,24 @@ class controller_order
     }
 
     /*
-     * Displays all orders made by current account
+     * Displays all orders made by current account.
      */
     public function action_current($params)
     {
         $id = $_SESSION['myshop']['account_id'];
-        if ($orders = model_order::get_by_client_id($id))
-        {
+        if ($orders = model_order::get_by_client_id($id)) {
             @include_once APP_PATH . "view/snippets/header.tpl.php";
-            foreach($orders as $order){
+            foreach ($orders as $order) {
                 @include APP_PATH . "view/order_current.tpl.php";
             }
             @include_once APP_PATH . "view/snippets/footer.tpl.php";
-        }
-        else @include_once APP_PATH . "view/order_empty.tpl.php";
+        } else @include_once APP_PATH . "view/order_empty.tpl.php";
     }
 
+    /**
+     * This function allows us to se an specific order.
+     * @param $params
+     */
     public function action_view($params)
     {
         $id = $params[0];
@@ -51,14 +57,24 @@ class controller_order
         @include_once APP_PATH . 'view/order_view.tpl.php';
     }
 
-    public function action_delete($params){
+    /**
+     * This function deletes an order.
+     * @param $params
+     */
+    public function action_delete($params)
+    {
         $order = model_order::load_by_id($params[0]);
         $order->delete();
 
         @include_once APP_PATH . "view/order_deleted.tpl.php";
     }
 
-    public function action_remove($params){
+    /**
+     * This function removes an order.
+     * @param $params
+     */
+    public function action_remove($params)
+    {
         $order = model_order::load_by_id($params[0]);
         $order->remove_cake($params[1]);
         @include_once APP_PATH . "view/order_removed.tpl.php";

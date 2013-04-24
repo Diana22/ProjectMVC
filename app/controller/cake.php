@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: Andrada
- * Date: 4/17/13
- * Time: 10:29 AM
- * To change this template use File | Settings | File Templates.
- */
+
 class controller_cake
 {
+    /**
+     * Returns a list of all cakes.
+     * @param $params
+     */
     public static function  action_list($params)
     {
         $cakes = model_cake::get_all();
@@ -27,7 +25,9 @@ class controller_cake
         @include_once APP_PATH . 'view/cake_view.tpl.php';
     }
 
-
+    /**
+     * Redirects us to the file that creates the delete cake confirmation page.
+     */
     public function action_deleted()
     {
         // Include view for this page
@@ -35,6 +35,9 @@ class controller_cake
 
     }
 
+    /**
+     * Redirects us to the file that creates the updated cake confirmation page.
+     */
     public function action_updated()
     {
         // Include view for this page
@@ -42,6 +45,10 @@ class controller_cake
 
     }
 
+    /**
+     * Allows us to edit a cake.
+     * @param $params
+     */
     public function action_edit($params)
     {
         @include_once APP_PATH . 'model/cake.php';
@@ -88,7 +95,10 @@ class controller_cake
 
     }
 
-
+    /**
+     * This function allows us to add a cake using "create" function.
+     * @param $params
+     */
     public function action_add($params)
     {
         @include_once APP_PATH . 'model/cake.php';
@@ -102,18 +112,6 @@ class controller_cake
         }
 
         @include APP_PATH . 'view/cake_created.tpl.php';
-
-    }
-	
-	public function action_search() {
-        $cakes = array();
-        if(isset($_POST['form']['action'])) {
-            $name = $_POST['form']['name'];
-            $cakes = model_cake::search_by_ingredient($name);
-            @include_once APP_PATH . 'view/cake_list.tpl.php';
-            die;
-        }
-        @include APP_PATH .'view/cake_search.tpl.php';
 
     }
 }

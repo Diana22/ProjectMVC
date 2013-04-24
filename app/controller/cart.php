@@ -9,7 +9,10 @@
 
 class controller_cart
 {
-
+    /**
+     * Redirects us to the file that creates the updated cart confirmation page.
+     * @param $params
+     */
     function action_updated($params)
     {
         // Include view for this page
@@ -17,6 +20,10 @@ class controller_cart
 
     }
 
+    /**
+     * This sends the command for processing.
+     * @param $params
+     */
     function action_send($params)
     {
         // Client must be logged in to access this page
@@ -41,6 +48,10 @@ class controller_cart
         die;
     }
 
+    /**
+     * Removes all cakes from cart.
+     * @param $params
+     */
     function action_empty($params)
     {
         $cart = model_cart::load();
@@ -53,6 +64,10 @@ class controller_cart
         die;
     }
 
+    /**
+     * Updates a cake using "update_cake" function and redirects us to the file that makes the updated cart confirmation page.
+     * @param $params
+     */
     function action_update($params)
     {
         if (isset($_POST['form']['action'])) {
@@ -67,6 +82,10 @@ class controller_cart
         die;
     }
 
+    /**
+     * Adds a cake to cart.
+     * @param $params
+     */
     function action_add($params)
     {
         if (isset($_POST['form']['action'])) {
@@ -83,6 +102,10 @@ class controller_cart
         die;
     }
 
+    /**
+     * Loads all carts.
+     * @param $params
+     */
     function action_index($params)
     {
         $cart = model_cart::load();
@@ -91,18 +114,30 @@ class controller_cart
         @include_once APP_PATH . 'view/cart_index.tpl.php';
     }
 
+    /**
+     * Redirects us to the file that creates the added caart confirmation page.
+     * @param $params
+     */
     function action_added($params)
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cart_added.tpl.php';
     }
 
+    /**
+     * Redirects us to the file that creates the emptied cart confirmation page.
+     * @param $params
+     */
     function  action_emptied($params)
     {
         // Include view for this page
         @include_once APP_PATH . 'view/cart_emptied.tpl.php';
     }
 
+    /**
+     * Redirects us to the file that creates the sent cart confirmation page.
+     * @param $params
+     */
     function action_sent($params)
     {
         // Include view for this page

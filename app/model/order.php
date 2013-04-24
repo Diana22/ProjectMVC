@@ -199,7 +199,6 @@ class model_order
             }
             ksort($return);
         }
-        ;
         return $return;
     }
 }

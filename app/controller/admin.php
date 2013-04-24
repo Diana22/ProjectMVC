@@ -30,18 +30,29 @@ class controller_admin {
 		@include_once APP_PATH . 'view/admin_ingredients.tpl.php';
 	}
 
+    /**
+     * Returns list of orders.
+     * @param $params
+     */
     function action_orders($params)
     {
         $orders = model_order::get_all();
         @include APP_PATH . 'view/admin_orders.tpl.php';
     }
 
+    /*
+     * Returns list of all cakes.
+     */
     function action_cakes($params){
         $cakes = model_cake::get_all();
         // Include view for this page
         @include_once APP_PATH . 'view/admin_cake_list.tpl.php';
     }
 
+    /**
+     * Returns a cake loaded by ID.
+     * @param $params
+     */
     function action_cake($params){
         $cake = model_cake::load_by_id($params[0]);
         @include_once APP_PATH . 'view/admin_cake_view.tpl.php';
