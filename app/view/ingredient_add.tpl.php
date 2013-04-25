@@ -6,11 +6,8 @@
 <?php endif ?>
 
 <form action="<?php echo APP_URL ?>ingredient/add/<?php echo $ingredient->id; ?>" method="post">
-    <label>
-        <input type="hidden" name="form[id]" value="<?php $ingredient->id ?>"/>
-    </label>
     <label>Nume
-        <input type="text" name="form[name]" value="<?php $ingredient->name ?>"/>
+        <input type="text" name="form[name]" value=""/>
     </label>
     <br/>
     <input type="submit" name="form[action]" value="Add"/>

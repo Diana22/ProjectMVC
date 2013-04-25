@@ -7,7 +7,7 @@
 
 <form action="<?php echo APP_URL ?>ingredient/edit/<?php echo $ingredient->id; ?>" method="post">
     <label>
-        <input type="hidden" name="form[id]" value="<?php $ingredient->id ?>"/>
+        <input type="hidden" name="form[id]" value="<?php echo $ingredient->id ?>"/>
     </label>
     <label>Nume
         <input type="text" name="form[name]" value="<?php echo $ingredient->name ?>"/>

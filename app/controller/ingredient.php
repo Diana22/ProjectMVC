@@ -21,9 +21,11 @@ class controller_ingredient
         $e = $params[0];
         $ingredient = model_ingredient::load_by_id($e);
         $form_error = FALSE;
-        if (isset($_POST['form']['action'])) {
+        if (isset($_POST['form']['action']) && model_validate::validate_array($_POST['form'])) {
             $ingredient->edit($_POST['form']['name']);
             header('Location: ' . APP_URL . 'ingredient/updated');
+        }
+        elseif (isset($_POST['form']['action']) && !model_validate::validate_array($_POST['form'])){
             $form_error = TRUE;
         }
         include APP_PATH . 'view/ingredient_edit.tpl.php';
@@ -47,9 +49,11 @@ class controller_ingredient
     {
         $ingredient = new model_ingredient();
         $form_error = FALSE;
-        if (isset($_POST['form']['action'])) {
+        if (isset($_POST['form']['action']) && model_validate::validate_array($_POST['form'])) {
             $ingredient->create($_POST['form']['name']);
             header('Location:' . APP_URL . 'ingredient/updated');
+        }
+        elseif (isset($_POST['form']['action']) && !model_validate::validate_array($_POST['form'])){
             $form_error = TRUE;
         }
         include APP_PATH . 'view/ingredient_add.tpl.php';
