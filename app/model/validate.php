@@ -15,4 +15,13 @@ class model_validate {
         return false;
     }
 
+    public static function validate_array($params){
+        foreach ($params as $key=>$value){
+            if (empty($value)){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
