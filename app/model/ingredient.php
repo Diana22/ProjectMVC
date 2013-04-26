@@ -107,6 +107,21 @@ class model_ingredient
         }
         return FALSE;
     }
+
+    /*
+     * @param $name
+     * @return true if @param is valid, sets $_SESSION['form']['error'] to 1 else.
+    */
+    public static function validate($name){
+        if (empty($name)){
+            $_SESSION['form']['error'] = 1;
+            return false;
+        }
+        else{
+            $_SESSION['form']['error'] = 0;
+            return true;
+        }
+    }
 }
 
 

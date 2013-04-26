@@ -1,8 +1,10 @@
 <?php @include APP_PATH . 'view/snippets/header.tpl.php'; ?>
 
 <h2>Edit ingredient</h2>
-<?php if ($form_error) : ?>
+<?php if (isset($_SESSION['form']['error'])):
+    if ($_SESSION['form']['error'] == 1): ?>
     <p>Ceva e gresit. Reincercati.</p>
+<?php endif ?>
 <?php endif ?>
 
 <form action="<?php echo APP_URL ?>ingredient/edit/<?php echo $ingredient->id; ?>" method="post">
