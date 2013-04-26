@@ -11,24 +11,6 @@ class controller_order
         include APP_PATH . 'view/order_updated.tpl.php';
     }
 
-    /**
-     * This function edits an order.
-     * @param $params
-     */
-    public function action_edit($params)
-    {
-        @include_once APP_PATH . '/model/order.php';
-        $order = model_order::load_by_id($params[0]);
-
-        if (isset($_POST['form']['action'])) {
-            $order->update($_POST['form']['id_client'], $_POST['form']['pickup_date']);
-            header('Location: ' . APP_URL . 'order/updated/');
-            die;
-        }
-        @include APP_PATH . 'view/order_edit.tpl.php';
-
-    }
-
     /*
      * Displays all orders made by current account.
      */
@@ -78,5 +60,28 @@ class controller_order
         $order = model_order::load_by_id($params[0]);
         $order->remove_cake($params[1]);
         @include_once APP_PATH . "view/order_removed.tpl.php";
+    }
+	
+	/**
+     * This function edits an order.
+     * @param $params
+     */
+    public function action_edit($params)
+    {
+        @include_once APP_PATH . '/model/order.php';
+        $order = model_order::load_by_id($params[0]);
+
+        if (isset($_POST['form']['action'])) {
+            model_order::validate($_POST['form']['id_client'], $_POST['form']['pickup_date']);
+            if($_SESSION['form']['error'] == 0) {
+                $order->update($_POST['form']['id_client'], $_POST['form']['pickup_date']);
+                header('Location: ' . APP_URL . 'order/updated/');
+                die;
+            }
+
+
+        }
+        @include APP_PATH . 'view/order_edit.tpl.php';
+
     }
 }
