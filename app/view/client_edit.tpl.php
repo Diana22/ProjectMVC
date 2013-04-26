@@ -1,8 +1,10 @@
 <?php @include APP_PATH . 'view/snippets/header.tpl.php'; ?>
 
 <h2>Edit client</h2>
-<?php if ($form_error) : ?>
-    <p>Ceva e gresit. Reincercati.</p>
+<?php if (isset($_SESSION['form']['error'])):
+    if ($_SESSION['form']['error'] == 1): ?>
+        <p>Ceva e gresit. Reincercati.</p>
+    <?php endif ?>
 <?php endif ?>
 
 <form action="<?php echo APP_URL ?>client/edit/<?php echo $client->account_id; ?>" method="post">

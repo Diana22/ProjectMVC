@@ -1,4 +1,5 @@
 <?php
+include_once APP_PATH.'/model/validator.php';
 
 class controller_account
 {
@@ -9,8 +10,10 @@ class controller_account
     function action_login($params)
     {
         // If the form was submitted, validate credentials.
-        $form_error = FALSE;
         if (isset($_POST['form']['action'])) {
+           model_account::validate_array($_POST['form']['user']);
+            if ($_SESSION['form']['error'] == 0) {
+
             $account_id = model_account::validate($_POST['form']['user'], $_POST['form']['password']);
             if ($account_id)
             {
@@ -29,15 +32,12 @@ class controller_account
                     die;
                 }
             }
-            $form_error = TRUE;
+        }
         }
         // Include view for this page.
         include_once APP_PATH . 'view/account_login.tpl.php';
     }
 
-    /**
-     * Redirects to the file that creates the creation page.
-     */
     function action_created($params){
         // Include view for this page.
         include_once APP_PATH . 'view/account_created.tpl.php';
@@ -55,49 +55,41 @@ class controller_account
         die;
     }
 
-    /**
-     * Create an account.
-     */
     function action_create($params){
-        if (isset($_POST['form'])){
+
+        if (isset($_POST['form']['action'])) {
+            model_account::validate_array($_POST['form']['user'],$_POST['form']['password']);
+            if ($_SESSION['form']['error'] == 0) {
             $account = model_account::create($_POST['form']['user'], $_POST['form']['password'], $_POST['form']['type']);
             model_client::create($account->id, $_POST['form']['name'], $_POST['form']['address'], $_POST['form']['phone']);
             header('Location:' . APP_URL . 'account/created');
             die;
+            }
         }
         @include_once APP_PATH . 'view/account_create.tpl.php';
     }
 
-    /**
-     * Update an account.
-     */
     function action_updated($params) {
         // Include view for this page
         @include_once APP_PATH . 'view/account_updated.tpl.php';
 
     }
 
-    /**
-     * Edit an account.
-     */
     function action_edit($params)
     {
         @include_once APP_PATH . '/model/account.php';
         $account = model_account::load_by_id($params[0]);
-
         if (isset($_POST['form']['action'])) {
+            model_account::validate_array($_POST['form']['user'],$_POST['form']['password']);
+            if ($_SESSION['form']['error'] == 0) {
             $account->update($_POST['form']['username'], $_POST['form']['pass'], $_POST['form']['type']);
             header('Location: ' . APP_URL . 'account/updated/');
             die;
-
         }
         @include APP_PATH . 'view/account_edit.tpl.php';
-
+        }
     }
 
-    /**
-     * View a specific account.
-     */
     function action_view($params)
     {
         $id = $_SESSION['myshop']['account_id'];

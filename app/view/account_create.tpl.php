@@ -1,6 +1,11 @@
 <?php @include APP_PATH . 'view/snippets/header.tpl.php'; ?>
+<?php @include APP_PATH.'/model/validate.php';?>
 <h2>Create a new account:</h2>
-
+<?php if (isset($_SESSION['form']['error'])):
+    if ($_SESSION['form']['error'] == 1): ?>
+        <p>Ceva e gresit. Reincercati.</p>
+    <?php endif ?>
+<?php endif ?>
     <form action="<?php echo APP_URL; ?>account/create" method="post">
         <label>Username
             <input type="text" name="form[user]" value="" />

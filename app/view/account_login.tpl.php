@@ -2,8 +2,10 @@
 
 <h2>Autentificare</h2>
 
-<?php if ($form_error) : ?>
-	<p><em>Utilizator sau parola gresita. Reincercati.</em></p>
+<?php if (isset($_SESSION['form']['error'])):
+    if ($_SESSION['form']['error'] == 1): ?>
+        <p><em>Utilizator sau parola gresita. Reincercati.</em></p>
+    <?php endif ?>
 <?php endif ?>
 
 <form action="<?php echo APP_URL; ?>account/login" method="post">

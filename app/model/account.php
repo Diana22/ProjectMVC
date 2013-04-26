@@ -11,14 +11,6 @@ class model_account {
     var $pass;
     var $type;
 
-    /**
-     * Add a new account in database
-     * @param $id
-     * @param $username
-     * @param $pass
-     * @param $type
-     * @return bool|model_account
-     */
     public static function create($username, $pass, $type){
         $db = model_database::instance();
         $sql = 'INSERT INTO accounts (account_username, account_pass, account_type)
@@ -30,12 +22,6 @@ class model_account {
         return false;
     }
 
-    /**
-     * Validate a account
-     * @param $username
-     * @param $pass
-     * @return bool
-     */
     public static function validate($username, $pass)
     {
         $db = model_database::instance();
@@ -47,18 +33,15 @@ class model_account {
         {
             return $result['account_id'];
         }
+        $_SESSION['form']['error'] = 0;
        return false;
     }
 
-    /**
-     * Update a account in database
-     * @param $username
-     * @param $pass
-     * @param $type
-     * @return bool
-     */
     public function update($username, $pass, $type)
     {
+        if(empty($pass)){
+            $pass = $this->pass;
+        }
         $db = model_database::instance();
 
         $sql = 'UPDATE accounts
@@ -77,10 +60,6 @@ class model_account {
         return false;
     }
 
-    /**
-     * Delete a account from database
-     * @return bool
-     */
     public function delete()
     {
         $db = model_database::instance();
@@ -97,18 +76,10 @@ class model_account {
 
     }
 
-    /**
-     * @return model_client
-     */
     public function get_client(){
         return model_client::load_by_account_id($this->id);
     }
 
-    /**
-     * Load a account by id from database
-     * @param $account_id
-     * @return bool|model_account
-     */
     public static function load_by_id($account_id){
         $db = model_database::instance();
         $sql = 'SELECT * FROM accounts where account_id=' . $account_id;
@@ -122,4 +93,17 @@ class model_account {
         }
         return false;
     }
+
+    public static function validate_array($username){
+        if (empty($username)){
+            $_SESSION['form']['error'] = 1;
+            return false;
+        }
+        else{
+            $_SESSION['form']['error'] = 0;
+            return true;
+        }
+    }
+
+
 }

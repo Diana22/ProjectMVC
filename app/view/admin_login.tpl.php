@@ -3,7 +3,7 @@
 <h2>Autentificare admin</h2>
 
 <?php if ($form_error) : ?>
-	<p><em>Utilizator sau parola gresita. Reincercati.</em></p>
+<p><em>Utilizator sau parola gresita. Reincercati.</em></p>
 <?php endif ?>
 
 <form action="<?php echo APP_URL; ?>admin/login" method="post">
