@@ -181,5 +181,26 @@ class model_cake
         }
         return FALSE;
     }
+	
+	/**
+	 * Search cakes by ingredients.
+	 */
+	public static function search_by_ingredient($name)
+    {
+        $e =  implode(",", $name);
+        $db = model_database::instance();
+        $sql = 'SELECT distinct ic_id_cake FROM ingredients_cakes
+               WHERE ic_id_ingredient IN  (' . $e .')';
+        if ($result = $db->get_rows($sql)) {
+            $res = array();
+            foreach ($result as $re) {
+                $cake = model_cake::load_by_id($re['ic_id_cake']);
+                $res[] = $cake;
+            }
+            return $res;
+        }
+        return FALSE;
+
+    }
 
 }
