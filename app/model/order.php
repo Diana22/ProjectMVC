@@ -217,4 +217,27 @@ class model_order
             return true;
         }
     }
+	 /*
+     * @return current status
+     */
+    function get_status(){
+        return $this->status;
+    }
+
+    /*
+     * Set status.
+     * @param $status.
+     * @return true.
+     */
+    function set_status($status){
+        $db = model_database::instance();
+        $sql = 'UPDATE orders
+                SET order_status=' . $status . '
+                WHERE order_id=' . $this->id;
+        if ($db->execute($sql)) {
+            $this->status = $status;
+            return true;
+        }
+        return false;
+    }
 }

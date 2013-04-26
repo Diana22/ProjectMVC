@@ -75,6 +75,7 @@ class controller_order
             model_order::validate($_POST['form']['id_client'], $_POST['form']['pickup_date']);
             if($_SESSION['form']['error'] == 0) {
                 $order->update($_POST['form']['id_client'], $_POST['form']['pickup_date']);
+				$order->set_status($_POST['form']['status']);
                 header('Location: ' . APP_URL . 'order/updated/');
                 die;
             }

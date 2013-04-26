@@ -14,8 +14,29 @@
         <label>Pickup Date
             <input type="text" name="form[pickup_date]" value=<?php echo $order->pickup_date; ?>>
         </label><br/>
-
-        <input type="hidden" name="form[id]" value=<?php echo $order->id; ?>>
+		
+		<label> <?php if($order->get_status() == $order::STATUS_NEW) : ?>
+            <input type="radio" checked name="form[status]" value="-1">New order
+                <?php else :?>
+                <input type="radio" name="form[status]" value="-1">New order
+            <?php endif ?>
+        </label><br/>
+        
+		<label> <?php if($order->get_status() == $order::STATUS_PROCESSED) : ?>
+                <input type="radio" checked name="form[status]" value="0">Processed
+            <?php else :?>
+                <input type="radio" name="form[status]" value="0">Processed
+            <?php endif ?>
+        </label><br/>
+        
+		<label> <?php if($order->get_status() == $order::STATUS_CANCELLED) : ?>
+                <input type="radio" checked name="form[status]" value="1">Cancelled
+            <?php else :?>
+                <input type="radio" name="form[status]" value="1">Cancelled
+            <?php endif ?>
+        </label><br/>
+       
+	   <input type="hidden" name="form[id]" value=<?php echo $order->id; ?>>
         <input type="submit" name="form[action]" value="Update">
     </form>
 
