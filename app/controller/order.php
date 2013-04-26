@@ -72,9 +72,9 @@ class controller_order
         $order = model_order::load_by_id($params[0]);
 
         if (isset($_POST['form']['action'])) {
-            model_order::validate($_POST['form']['id_client'], $_POST['form']['pickup_date']);
+            model_order::validate($_POST['form']['pickup_date']);
             if($_SESSION['form']['error'] == 0) {
-                $order->update($_POST['form']['id_client'], $_POST['form']['pickup_date']);
+                $order->update($params[0], $_POST['form']['pickup_date']);
 				$order->set_status($_POST['form']['status']);
                 header('Location: ' . APP_URL . 'order/updated/');
                 die;

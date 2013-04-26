@@ -205,17 +205,14 @@ class model_order
 	/**
 	 * This function validate an order.
 	 */
-	public static function validate($client_id, $pickup_date)
+	public static function validate($pickup_date)
     {
-        if (empty($client_id) or empty($pickup_date)){
+        if (empty($pickup_date)){
             $_SESSION['form']['error'] = 1;
             return false;
         }
-        else
-        {
             $_SESSION['form']['error'] = 0;
             return true;
-        }
     }
 	 /*
      * @return current status

@@ -7,10 +7,6 @@
 
     <form action=<?php echo APP_URL; ?>order/edit/<?php echo $order->id; ?> method="post">
 
-        <label>Client ID
-            <input type="text" name="form[id_client]" value=<?php echo $order->id_client; ?>>
-        </label><br/>
-
         <label>Pickup Date
             <input type="text" name="form[pickup_date]" value=<?php echo $order->pickup_date; ?>>
         </label><br/>
